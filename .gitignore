@@ -1,2 +1,5 @@
 adhd-focus-hub/frontend/node_modules
 adhd-focus-hub/backend/.env
+# Python cache
+__pycache__/
+*.pyc
