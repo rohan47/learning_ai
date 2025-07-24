@@ -282,7 +282,7 @@ npm run lint
 
 ## Development Agents
 
-See [DEV_AGENTS.md](../DEV_AGENTS.md) for a list of Codex development agents, how to start them, and example workflows.
+See [AGENT.md](../AGENT.md) for a list of Codex development agents, how to start them, and example workflows.
 
 ## 🚀 Deployment
 
