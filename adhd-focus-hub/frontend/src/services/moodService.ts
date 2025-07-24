@@ -3,19 +3,29 @@
  */
 
 import apiClient, { handleApiResponse, handleApiError } from './api';
-import { 
-  MoodCheckRequest, 
-  MoodCheckResponse, 
-  MoodTrackingResponse 
+import {
+  MoodCheckRequest,
+  MoodCheckResponse,
+  MoodTrackingResponse,
+  MoodLogOut,
 } from './types';
 
 export class MoodService {
   /**
    * Log mood and get emotional support
    */
-  static async logMood(request: MoodCheckRequest): Promise<MoodCheckResponse> {
+  static async logMood(request: MoodCheckRequest): Promise<MoodLogOut> {
     try {
-      const response = await apiClient.post<MoodCheckResponse>('/api/v1/mood/log', request);
+      const response = await apiClient.post<MoodLogOut>('/api/v1/moods', request);
+      return handleApiResponse(response);
+    } catch (error) {
+      throw new Error(handleApiError(error));
+    }
+  }
+
+  static async listMoods(): Promise<MoodLogOut[]> {
+    try {
+      const response = await apiClient.get<MoodLogOut[]>('/api/v1/moods');
       return handleApiResponse(response);
     } catch (error) {
       throw new Error(handleApiError(error));

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { TaskService, ChatService } from '../services';
 import { Plus, Clock, CheckCircle, AlertCircle } from 'lucide-react';
 
@@ -16,31 +16,58 @@ const Tasks: React.FC = () => {
   const [newTask, setNewTask] = useState({ title: '', description: '', priority: 'medium' as const });
   const [isLoading, setIsLoading] = useState(false);
   const [planningResponse, setPlanningResponse] = useState<string>('');
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const loadTasks = async () => {
+      setIsLoading(true);
+      try {
+        const data = await TaskService.listTasks();
+        setTasks(data.map(t => ({
+          id: t.id.toString(),
+          title: t.title,
+          description: t.description || undefined,
+          priority: 'medium'
+        })));
+      } catch (err) {
+        console.error('Error loading tasks:', err);
+        setError(err instanceof Error ? err.message : 'Failed to load tasks');
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    loadTasks();
+  }, []);
 
   const addTask = async () => {
     if (!newTask.title.trim()) return;
 
     setIsLoading(true);
     try {
-      // Get planning help from the planning agent
+      const created = await TaskService.createTask({
+        title: newTask.title,
+        description: newTask.description || undefined,
+      });
+
       const planningHelp = await TaskService.getPlanningHelp(
         `${newTask.title}: ${newTask.description}`,
         { priority: newTask.priority }
       );
 
-      const task: Task = {
-        id: Date.now().toString(),
-        title: newTask.title,
-        description: newTask.description,
-        priority: newTask.priority,
-      };
-
-      setTasks(prev => [...prev, task]);
+      setTasks(prev => [
+        ...prev,
+        {
+          id: created.id.toString(),
+          title: created.title,
+          description: created.description || undefined,
+          priority: newTask.priority,
+        },
+      ]);
       setPlanningResponse(planningHelp.response);
       setNewTask({ title: '', description: '', priority: 'medium' });
     } catch (error) {
       console.error('Error adding task:', error);
-      alert('Failed to get planning help. Please try again.');
+      setError(error instanceof Error ? error.message : 'Failed to add task');
     } finally {
       setIsLoading(false);
     }
@@ -109,6 +136,11 @@ const Tasks: React.FC = () => {
     <div className="page">
       <h1 className="page-title">Task Planning</h1>
       <p className="text-gray-600 mb-6">AI-powered task breakdown and planning with ADHD-aware strategies</p>
+      {error && (
+        <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+          <span className="font-semibold">Error:</span> {error}
+        </div>
+      )}
 
       {/* Add New Task */}
       <div className="bg-white rounded-lg shadow p-6 mb-6">

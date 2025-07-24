@@ -39,6 +39,31 @@ export interface MoodCheckRequest {
   triggers?: string[];
 }
 
+export interface Token {
+  access_token: string;
+  token_type: string;
+}
+
+export interface TaskCreate {
+  title: string;
+  description?: string;
+}
+
+export interface TaskOut {
+  id: number;
+  title: string;
+  description?: string | null;
+  completed: boolean;
+  created_at: string;
+}
+
+export interface MoodLogOut {
+  id: number;
+  mood_score: number;
+  notes?: string | null;
+  created_at: string;
+}
+
 // ===== RESPONSE TYPES =====
 
 export interface ChatResponse {

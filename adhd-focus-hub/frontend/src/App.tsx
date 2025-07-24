@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import Header from './components/Header';
 import Sidebar from './components/Sidebar';
 import Dashboard from './pages/Dashboard';
@@ -8,8 +8,19 @@ import Focus from './pages/Focus';
 import Mood from './pages/Mood';
 import Learning from './pages/Learning';
 import Organization from './pages/Organization';
+import Login from './pages/Login';
+import Register from './pages/Register';
 import AIChat from './components/AIChat';
+import { AuthProvider, useAuth } from './context/AuthContext';
 import './App.css';
+
+const RequireAuth: React.FC<{ children: JSX.Element }> = ({ children }) => {
+  const { token } = useAuth();
+  if (!token) {
+    return <Navigate to="/login" replace />;
+  }
+  return children;
+};
 
 function App() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -36,37 +47,77 @@ function App() {
 
   return (
     <Router>
-      <div className={`app ${isDarkMode ? 'dark' : ''}`}>
-        <Header 
-          onMenuClick={() => setSidebarOpen(!sidebarOpen)}
-          onChatClick={() => setChatOpen(!chatOpen)}
-          isDarkMode={isDarkMode}
-          onDarkModeToggle={() => setIsDarkMode(!isDarkMode)}
-        />
-        
-        <div className="app-body">
-          <Sidebar 
-            isOpen={sidebarOpen}
-            onClose={() => setSidebarOpen(false)}
+      <AuthProvider>
+        <div className={`app ${isDarkMode ? 'dark' : ''}`}>
+          <Header
+            onMenuClick={() => setSidebarOpen(!sidebarOpen)}
+            onChatClick={() => setChatOpen(!chatOpen)}
+            isDarkMode={isDarkMode}
+            onDarkModeToggle={() => setIsDarkMode(!isDarkMode)}
           />
-          
-          <main className="main-content">
-            <Routes>
-              <Route path="/" element={<Dashboard />} />
-              <Route path="/tasks" element={<Tasks />} />
-              <Route path="/focus" element={<Focus />} />
-              <Route path="/mood" element={<Mood />} />
-              <Route path="/learning" element={<Learning />} />
-              <Route path="/organization" element={<Organization />} />
-            </Routes>
-          </main>
+
+          <div className="app-body">
+            <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
+
+            <main className="main-content">
+              <Routes>
+                <Route path="/login" element={<Login />} />
+                <Route path="/register" element={<Register />} />
+                <Route
+                  path="/"
+                  element={
+                    <RequireAuth>
+                      <Dashboard />
+                    </RequireAuth>
+                  }
+                />
+                <Route
+                  path="/tasks"
+                  element={
+                    <RequireAuth>
+                      <Tasks />
+                    </RequireAuth>
+                  }
+                />
+                <Route
+                  path="/focus"
+                  element={
+                    <RequireAuth>
+                      <Focus />
+                    </RequireAuth>
+                  }
+                />
+                <Route
+                  path="/mood"
+                  element={
+                    <RequireAuth>
+                      <Mood />
+                    </RequireAuth>
+                  }
+                />
+                <Route
+                  path="/learning"
+                  element={
+                    <RequireAuth>
+                      <Learning />
+                    </RequireAuth>
+                  }
+                />
+                <Route
+                  path="/organization"
+                  element={
+                    <RequireAuth>
+                      <Organization />
+                    </RequireAuth>
+                  }
+                />
+              </Routes>
+            </main>
+          </div>
+
+          <AIChat isOpen={chatOpen} onClose={() => setChatOpen(false)} />
         </div>
-        
-        <AIChat 
-          isOpen={chatOpen}
-          onClose={() => setChatOpen(false)}
-        />
-      </div>
+      </AuthProvider>
     </Router>
   );
 }

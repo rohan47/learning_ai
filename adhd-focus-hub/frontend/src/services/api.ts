@@ -5,6 +5,8 @@
 
 import axios, { AxiosInstance, AxiosResponse } from 'axios';
 
+const TOKEN_KEY = 'adhd-jwt';
+
 // API Configuration
 const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:8001';
 
@@ -21,6 +23,10 @@ const apiClient: AxiosInstance = axios.create({
 apiClient.interceptors.request.use(
   (config) => {
     console.log(`🚀 API Request: ${config.method?.toUpperCase()} ${config.url}`);
+    const token = localStorage.getItem(TOKEN_KEY);
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
     return config;
   },
   (error) => {
@@ -37,12 +43,17 @@ apiClient.interceptors.response.use(
   },
   (error) => {
     console.error('❌ API Response Error:', error.response?.data || error.message);
-    
+
     // Handle specific error cases
     if (error.response?.status === 503) {
       throw new Error('AI agents are initializing. Please try again in a moment.');
     }
-    
+    if (error.response?.status === 401) {
+      localStorage.removeItem(TOKEN_KEY);
+      window.location.href = '/login';
+      return Promise.reject(new Error('Authentication required.'));
+    }
+
     throw error;
   }
 );
@@ -58,6 +69,9 @@ export const handleApiResponse = <T>(response: AxiosResponse<T>): T => {
 export const handleApiError = (error: any): string => {
   if (error.response?.data?.detail) {
     return error.response.data.detail;
+  }
+  if (error.message === 'Network Error') {
+    return 'Unable to connect to server. Please check your connection.';
   }
   if (error.message) {
     return error.message;
