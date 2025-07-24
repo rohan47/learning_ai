@@ -2,7 +2,7 @@
 
 from fastapi import FastAPI, HTTPException, Depends, BackgroundTasks
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.security import HTTPBearer
+from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from contextlib import asynccontextmanager
 import asyncio
 import logging
@@ -10,11 +10,18 @@ import sys
 import os
 from pathlib import Path
 from typing import Dict, Any
-from datetime import datetime
+from datetime import datetime, timedelta
 from dotenv import load_dotenv
+from jose import JWTError, jwt
+from passlib.context import CryptContext
+from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy import select
+from database import get_db
+from database.models import User, Task, MoodLog
 
-# Load environment variables
-load_dotenv()
+# Load environment variables from backend/.env if present
+env_path = Path(__file__).resolve().parent.parent / ".env"
+load_dotenv(env_path)
 
 # Add the parent directory to the path to resolve imports
 sys.path.append(str(Path(__file__).parent.parent))
@@ -28,6 +35,49 @@ logger = logging.getLogger(__name__)
 
 # Global crew instance
 crew_instance = None
+
+# Auth settings
+SECRET_KEY = os.getenv("SECRET_KEY", "secret")
+ALGORITHM = "HS256"
+ACCESS_TOKEN_EXPIRE_MINUTES = 60
+pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+security = HTTPBearer(auto_error=False)
+
+def verify_password(plain_password: str, hashed_password: str) -> bool:
+    return pwd_context.verify(plain_password, hashed_password)
+
+def get_password_hash(password: str) -> str:
+    return pwd_context.hash(password)
+
+def create_access_token(data: dict, expires_delta: timedelta | None = None) -> str:
+    to_encode = data.copy()
+    expire = datetime.utcnow() + (expires_delta or timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES))
+    to_encode.update({"exp": expire})
+    return jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
+
+async def authenticate_user(db: AsyncSession, username: str, password: str) -> User | None:
+    result = await db.execute(select(User).where(User.username == username))
+    user = result.scalar_one_or_none()
+    if user and verify_password(password, user.hashed_password):
+        return user
+    return None
+
+async def get_current_user(credentials: HTTPAuthorizationCredentials = Depends(security), db: AsyncSession = Depends(get_db)) -> User:
+    if credentials is None:
+        raise HTTPException(status_code=401, detail="Not authenticated")
+    token = credentials.credentials
+    try:
+        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+        username: str = payload.get("sub")
+        if username is None:
+            raise HTTPException(status_code=401, detail="Invalid token")
+    except JWTError:
+        raise HTTPException(status_code=401, detail="Invalid token")
+    result = await db.execute(select(User).where(User.username == username))
+    user = result.scalar_one_or_none()
+    if user is None:
+        raise HTTPException(status_code=401, detail="User not found")
+    return user
 
 
 @asynccontextmanager
@@ -74,7 +124,6 @@ app.add_middleware(
 )
 
 # Security
-security = HTTPBearer(auto_error=False)
 
 
 # Dependency to get crew instance
@@ -107,6 +156,27 @@ async def health_check():
         crew_initialized=crew_instance is not None,
         version="1.0.0"
     )
+
+
+@app.post("/api/v1/auth/register", response_model=Token)
+async def register(user: UserCreate, db: AsyncSession = Depends(get_db)):
+    existing = await db.execute(select(User).where(User.username == user.username))
+    if existing.scalar_one_or_none():
+        raise HTTPException(status_code=400, detail="Username already registered")
+    new_user = User(username=user.username, hashed_password=get_password_hash(user.password))
+    db.add(new_user)
+    await db.commit()
+    access_token = create_access_token({"sub": new_user.username})
+    return Token(access_token=access_token)
+
+
+@app.post("/api/v1/auth/login", response_model=Token)
+async def login(user: UserLogin, db: AsyncSession = Depends(get_db)):
+    db_user = await authenticate_user(db, user.username, user.password)
+    if not db_user:
+        raise HTTPException(status_code=401, detail="Invalid credentials")
+    token = create_access_token({"sub": db_user.username})
+    return Token(access_token=token)
 
 
 # Main chat endpoint - routes to appropriate agents
@@ -423,6 +493,49 @@ async def get_conversation_summary(
             status_code=500,
             detail=f"Conversation summary error: {str(e)}"
         )
+
+
+# CRUD endpoints for tasks
+@app.post("/api/v1/tasks", response_model=TaskOut)
+async def create_task(task: TaskCreate, current_user: User = Depends(get_current_user), db: AsyncSession = Depends(get_db)):
+    new_task = Task(owner_id=current_user.id, title=task.title, description=task.description)
+    db.add(new_task)
+    await db.commit()
+    await db.refresh(new_task)
+    return new_task
+
+
+@app.get("/api/v1/tasks", response_model=list[TaskOut])
+async def list_tasks(current_user: User = Depends(get_current_user), db: AsyncSession = Depends(get_db)):
+    result = await db.execute(select(Task).where(Task.owner_id == current_user.id))
+    return result.scalars().all()
+
+
+@app.delete("/api/v1/tasks/{task_id}")
+async def delete_task(task_id: int, current_user: User = Depends(get_current_user), db: AsyncSession = Depends(get_db)):
+    result = await db.execute(select(Task).where(Task.id == task_id, Task.owner_id == current_user.id))
+    task_obj = result.scalar_one_or_none()
+    if not task_obj:
+        raise HTTPException(status_code=404, detail="Task not found")
+    await db.delete(task_obj)
+    await db.commit()
+    return {"status": "deleted"}
+
+
+# CRUD endpoints for mood logs
+@app.post("/api/v1/moods", response_model=MoodLogOut)
+async def create_mood(log: MoodCheckRequest, current_user: User = Depends(get_current_user), db: AsyncSession = Depends(get_db)):
+    entry = MoodLog(owner_id=current_user.id, mood_score=log.mood_score, notes=log.notes)
+    db.add(entry)
+    await db.commit()
+    await db.refresh(entry)
+    return entry
+
+
+@app.get("/api/v1/moods", response_model=list[MoodLogOut])
+async def list_moods(current_user: User = Depends(get_current_user), db: AsyncSession = Depends(get_db)):
+    result = await db.execute(select(MoodLog).where(MoodLog.owner_id == current_user.id))
+    return result.scalars().all()
 
 
 # Background task for logging interactions
