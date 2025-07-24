@@ -8,8 +8,7 @@ A comprehensive ADHD-focused productivity application with AI-powered assistance
 
 ### Backend (FastAPI + CrewAI)
 - **Location**: `backend/`
-- **Main API**: `simple_main.py` (simplified version running successfully)
-- **Full CrewAI Implementation**: `api/main.py` (with 5 specialized ADHD agents)
+- **Main API**: `api/main.py` (with 5 specialized ADHD agents)
 - **Port**: 8000
 - **Status**: ✅ Running successfully
 
@@ -44,7 +43,7 @@ A comprehensive ADHD-focused productivity application with AI-powered assistance
 ### 1. Start Backend
 ```bash
 cd backend
-python -m uvicorn simple_main:app --host 0.0.0.0 --port 8000 --reload
+python -m uvicorn api.main:app --host 0.0.0.0 --port 8000 --reload
 ```
 
 ### 2. Start Frontend
@@ -129,7 +128,6 @@ adhd-focus-hub/
 ├── backend/
 │   ├── api/              # FastAPI application
 │   ├── crew/             # CrewAI agents and tools
-│   ├── simple_main.py    # Simplified working version
 │   └── requirements.txt
 ├── frontend/
 │   ├── src/
