@@ -7,8 +7,11 @@ This repository uses CrewAI-based development agents located in `adhd-focus-hub/
 | Agent | Role |
 |-------|------|
 | **LeadPlanner** | Break down features and create a roadmap. |
+| **BackendArchitect** | Design scalable backend systems. |
+| **FrontendArchitect** | Define frontend component architecture. |
 | **BackendDeveloper** | Work on the FastAPI backend. |
 | **FrontendDeveloper** | Implement the React/TypeScript frontend. |
+| **IntegrationEngineer** | Manage CI/CD and service integration. |
 | **QATester** | Execute tests and report results. |
 | **DocsWriter** | Update project documentation. |
 
@@ -50,10 +53,22 @@ Below is the current development plan. Each agent should focus on the tasks in t
 - Connect existing pages so they fetch and save real data from the backend.
 - Provide graceful error handling for authentication failures or network issues.
 
+### BackendArchitect
+- Review database schemas and API design for scalability.
+- Propose deployment architecture and security best practices.
+
+### FrontendArchitect
+- Define the component hierarchy and shared state patterns.
+- Establish accessibility and performance standards for UI.
+
 ### QATester
 - Expand `adhd-focus-hub/test_tools.py` into a pytest suite covering planning tools and all API endpoints (authentication, tasks, mood logs).
 - Write tests for token validation, database CRUD operations, and error conditions.
 - Document how to run the tests and ensure the results are shared in pull requests.
+
+### IntegrationEngineer
+- Maintain CI/CD pipelines and ensure backend and frontend build correctly.
+- Coordinate environment variables and Docker configuration across services.
 
 ### DocsWriter
 - Update `README.md` with setup instructions for `.env.example`, database initialization, and running backend and frontend services.

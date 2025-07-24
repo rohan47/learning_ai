@@ -11,12 +11,12 @@ Each milestone is ordered by priority with an estimated time to complete.
 | 3 | **Database Layer** | - Set up SQLAlchemy models (User, Task, MoodLog).<br>- Configure PostgreSQL via `DATABASE_URL`.<br>- Create Alembic migrations.<br>- Document setup in README. | Database models and migrations committed. | Migrations run without errors and tables created. | 2 days | ✅ Completed |
 | 4 | **Authentication** | - Implement JWT-based auth in FastAPI.<br>- Protect endpoints with `HTTPBearer`.<br>- Create login/register routes.<br>- Add token storage in frontend. | Auth API and middleware. | Login and protected routes work with valid tokens. | 2 days | ✅ Completed |
 | 5 | **Frontend Integration** | - Update services in `frontend/src/services` to call backend APIs with auth tokens.<br>- Build login and registration pages.<br>- Connect task and mood pages to backend. | Working frontend communicating with backend. | Users can authenticate and CRUD data from UI. | 2 days | ✅ Completed |
-| 6 | **Comprehensive Testing** | - Expand `test_tools.py` into pytest suite.<br>- Cover all API endpoints and auth flow.<br>- Add CI instructions. | Pytest tests under `tests/` directory. | Test suite passes locally and in CI. | 1.5 days | ⏳ Pending |
+| 6 | **Comprehensive Testing** | - Expand `test_tools.py` into pytest suite.<br>- Cover all API endpoints and auth flow.<br>- Add CI instructions. | Pytest tests under `tests/` directory. | Test suite passes locally and in CI. | 1.5 days | ✅ Completed |
 | 7 | **Deployment** | - Create Docker compose for backend/frontend.<br>- Document deployment steps.<br>- Push images to container registry. | Dockerfiles and compose config for production. | Application deploys successfully on staging environment. | 1.5 days | ⏳ Pending |
 
 ## Timeline Overview
 
-Milestones 1–5 are complete. The remaining work for testing and deployment totals approximately **3 days**. Adjust as necessary based on team availability.
+Milestones 1–6 are complete. The remaining work for deployment totals approximately **1.5 days**. Adjust as necessary based on team availability.
 
 ## Usage by Agents
 
@@ -24,5 +24,8 @@ Milestones 1–5 are complete. The remaining work for testing and deployment tot
 - **FrontendDeveloper** tackles milestones 4–5.
 - **QATester** covers milestone 6.
 - **DocsWriter** updates documentation across all milestones.
+- **BackendArchitect** reviews backend design and guides deployment.
+- **FrontendArchitect** defines component architecture and performance standards.
+- **IntegrationEngineer** manages CI/CD pipelines for smooth releases.
 
 This roadmap should keep all agents aligned as the project progresses.

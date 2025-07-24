@@ -1,6 +1,7 @@
 """Main FastAPI application for ADHD Focus Hub."""
 
 from fastapi import FastAPI, HTTPException, Depends, BackgroundTasks
+from fastapi.encoders import jsonable_encoder
 from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
@@ -560,10 +561,12 @@ async def http_exception_handler(request, exc):
     """Handle HTTP exceptions."""
     return JSONResponse(
         status_code=exc.status_code,
-        content=ErrorResponse(
-            detail=exc.detail,
-            error_code=str(exc.status_code),
-        ).model_dump(),
+        content=jsonable_encoder(
+            ErrorResponse(
+                detail=exc.detail,
+                error_code=str(exc.status_code),
+            )
+        ),
     )
 
 
@@ -573,10 +576,12 @@ async def general_exception_handler(request, exc):
     logger.error(f"Unhandled exception: {exc}")
     return JSONResponse(
         status_code=500,
-        content=ErrorResponse(
-            detail="An unexpected error occurred. Please try again later.",
-            error_code="500",
-        ).model_dump(),
+        content=jsonable_encoder(
+            ErrorResponse(
+                detail="An unexpected error occurred. Please try again later.",
+                error_code="500",
+            )
+        ),
     )
 
 
