@@ -1,26 +1,27 @@
 """Main FastAPI application for ADHD Focus Hub."""
 
-from fastapi import FastAPI, HTTPException, Depends, BackgroundTasks
-from fastapi.encoders import jsonable_encoder
-from fastapi.responses import JSONResponse
-from fastapi.encoders import jsonable_encoder
-from fastapi.middleware.cors import CORSMiddleware
-from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
-from contextlib import asynccontextmanager
 import asyncio
 import logging
-import sys
 import os
-from pathlib import Path
-from typing import Dict, Any
+import sys
+from contextlib import asynccontextmanager
 from datetime import datetime, timedelta
+from pathlib import Path
+from typing import Any, Dict
+
 from dotenv import load_dotenv
+from fastapi import BackgroundTasks, Depends, FastAPI, HTTPException
+from fastapi.encoders import jsonable_encoder
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import JSONResponse
+from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from jose import JWTError, jwt
 from passlib.context import CryptContext
-from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
+from sqlalchemy.ext.asyncio import AsyncSession
+
 from database import get_db
-from database.models import User, Task, MoodLog
+from database.models import MoodLog, Task, User
 
 # Load environment variables from backend/.env if present
 env_path = Path(__file__).resolve().parent.parent / ".env"
@@ -29,8 +30,8 @@ load_dotenv(env_path)
 # Add the parent directory to the path to resolve imports
 sys.path.append(str(Path(__file__).parent.parent))
 
-from crew.crew import ADHDFocusHubCrew
 from api.models import *
+from crew.crew import ADHDFocusHubCrew
 
 # Initialize logging
 logging.basicConfig(level=logging.INFO)
