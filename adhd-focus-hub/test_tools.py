@@ -3,9 +3,18 @@
 
 import sys
 import os
-sys.path.append(os.path.join(os.path.dirname(__file__), '..', 'backend'))
 
-from crew.tools.planning_tools import TimeEstimationTool, TaskBreakdownTool, PriorityAssessmentTool
+# Ensure the backend package is available on the Python path. The previous path
+# pointed one directory above this project which caused imports to fail when
+# running these tests directly. Add the local `backend` directory so that
+# `import crew` works correctly.
+sys.path.append(os.path.join(os.path.dirname(__file__), 'backend'))
+
+from crew.tools.planning_tools import (
+    TimeEstimationTool,
+    TaskBreakdownTool,
+    PriorityAssessmentTool,
+)
 
 def test_time_estimation():
     """Test the time estimation tool."""
@@ -13,8 +22,8 @@ def test_time_estimation():
     tool = TimeEstimationTool()
     result = tool._run(
         task_description="Write a research paper on ADHD productivity",
-        complexity_level="high",
-        user_experience="beginner"
+        complexity_level="High",
+        user_context="beginner",
     )
     print("Result:", result)
     print()
@@ -24,9 +33,9 @@ def test_task_breakdown():
     print("=== Testing Task Breakdown Tool ===")
     tool = TaskBreakdownTool()
     result = tool._run(
-        task_title="Research Paper",
         task_description="Write a comprehensive research paper on ADHD productivity strategies",
-        estimated_duration=120
+        estimated_time=120,
+        user_context="",
     )
     print("Result:", result)
     print()
@@ -40,10 +49,10 @@ def test_priority_assessment():
             "Write research paper (urgent deadline)",
             "Clean room (routine)",
             "Call doctor (urgent)",
-            "Learn new creative skill (fun)"
+            "Learn new creative skill (fun)",
         ],
-        deadline_info={"research_paper": "tomorrow"},
-        energy_level=6
+        deadline_info="research paper due tomorrow",
+        user_context="",
     )
     print("Result:", result)
     print()
