@@ -20,19 +20,52 @@ export OPENAI_API_KEY=your_openai_api_key
 ```
 
 Start Codex with any combination of these agents. Example:
-
 ```bash
 codex agents start LeadPlanner BackendDeveloper FrontendDeveloper QATester DocsWriter
 ```
 
 The agents are imported from the `adhd_focus_hub.dev_agents` package.
 
+## Development Tasks
+
+Below is the current development plan. Each agent should focus on the tasks in their section.
+
+### LeadPlanner
+- Turn the "Next Steps" section in `PROJECT_STATUS.md` into sequential milestones: environment setup, CrewAI tool fixes, database layer, authentication, frontend integration, comprehensive testing, and deployment.
+- Break each milestone into discrete tasks with clear deliverables and success criteria.
+- Provide time estimates and priority ordering for the remaining work.
+
+### BackendDeveloper
+- Create `backend/.env.example` with `OPENAI_API_KEY`, `DATABASE_URL`, `REDIS_URL`, and `SECRET_KEY`.
+- Ensure `load_dotenv()` in `backend/api/main.py` loads a local `.env` file.
+- Review `backend/crew/tools/` for Pydantic v2 compliance and update models if necessary.
+- Implement SQLAlchemy models (User, Task, MoodLog) with Alembic migrations and connect to PostgreSQL via `DATABASE_URL`.
+- Add JWT-based authentication and protect API routes with `HTTPBearer`.
+- Create CRUD endpoints for tasks and mood logs.
+- Run `python adhd-focus-hub/test_tools.py` after making changes.
+
+### FrontendDeveloper
+- Add login and registration pages that store JWT tokens securely.
+- Update service files in `frontend/src/services/` to call the new authentication and CRUD endpoints with the token.
+- Connect existing pages so they fetch and save real data from the backend.
+- Provide graceful error handling for authentication failures or network issues.
+
+### QATester
+- Expand `adhd-focus-hub/test_tools.py` into a pytest suite covering planning tools and all API endpoints (authentication, tasks, mood logs).
+- Write tests for token validation, database CRUD operations, and error conditions.
+- Document how to run the tests and ensure the results are shared in pull requests.
+
+### DocsWriter
+- Update `README.md` with setup instructions for `.env.example`, database initialization, and running backend and frontend services.
+- Document new authentication routes and CRUD endpoints with example requests.
+- Describe the testing process and how development agents should run `python adhd-focus-hub/test_tools.py`.
+- Provide a brief guide on using the development agents defined in this file and `DEV_AGENTS.md`.
+
 ## Testing
 
 After code changes, run:
-
 ```bash
 python adhd-focus-hub/test_tools.py
 ```
-
 Include the output of this script in your pull request summary.
+
