@@ -7,8 +7,11 @@ This repository includes a set of development agents meant to streamline the con
 | Agent | Role |
 |-------|------|
 | **Lead Planner** | Breaks down features and creates a roadmap for implementation. |
+| **Backend Architect** | Designs backend architecture and APIs. |
+| **Frontend Architect** | Plans component structure and UI patterns. |
 | **Backend Developer** | Implements FastAPI endpoints and Python logic. |
 | **Frontend Developer** | Works on the React/TypeScript codebase. |
+| **Integration Engineer** | Oversees CI/CD and multi-service integration. |
 | **QA Tester** | Executes unit tests and reports results. |
 | **Docs Writer** | Updates project documentation and READMEs. |
 
@@ -21,7 +24,8 @@ This repository includes a set of development agents meant to streamline the con
    ```
 3. Start Codex with the agent list:
    ```bash
-   codex agents start LeadPlanner BackendDeveloper FrontendDeveloper QATester DocsWriter
+   codex agents start LeadPlanner BackendArchitect FrontendArchitect BackendDeveloper \
+     FrontendDeveloper IntegrationEngineer QATester DocsWriter
    ```
    Adjust the command if your Codex setup uses a different syntax or configuration file.
 
