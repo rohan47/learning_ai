@@ -1,26 +1,22 @@
 """Entry point for loading development workflow agents with Codex."""
 
 from . import (
-    BackendArchitect,
-    FrontendArchitect,
     BackendDeveloper,
     FrontendDeveloper,
-    TestingEngineer,
-    IntegrationEngineer,
-    ProjectManager,
+    LeadPlanner,
+    QATester,
+    DocsWriter,
 )
 
 
 def load() -> dict:
     """Return instantiated agents for Codex."""
     return {
-        "backend_architect": BackendArchitect(),
-        "frontend_architect": FrontendArchitect(),
+        "lead_planner": LeadPlanner(),
         "backend_developer": BackendDeveloper(),
         "frontend_developer": FrontendDeveloper(),
-        "testing_engineer": TestingEngineer(),
-        "integration_engineer": IntegrationEngineer(),
-        "project_manager": ProjectManager(),
+        "qa_tester": QATester(),
+        "docs_writer": DocsWriter(),
     }
 
 
