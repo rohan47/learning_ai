@@ -258,12 +258,15 @@ POST /api/v1/mood/log
 
 ### Running Tests
 ```bash
-# Backend tests
+# Run the entire test suite
+python test_tools.py
+
+# Backend tests only
 cd backend
 pytest
 
 # Frontend tests
-cd frontend
+cd ../frontend
 npm test
 ```
 
