@@ -6,6 +6,21 @@ from datetime import datetime
 from enum import Enum
 
 
+class Token(BaseModel):
+    access_token: str
+    token_type: str = "bearer"
+
+
+class UserCreate(BaseModel):
+    username: str = Field(..., min_length=3, max_length=100)
+    password: str = Field(..., min_length=6)
+
+
+class UserLogin(BaseModel):
+    username: str
+    password: str
+
+
 class TaskPriority(str, Enum):
     """Task priority levels."""
     low = "low"
@@ -76,6 +91,22 @@ class TaskBreakdownResponse(BaseModel):
     recommended_focus_sessions: int = Field(..., description="Recommended number of focus sessions")
 
 
+class TaskCreate(BaseModel):
+    title: str
+    description: Optional[str] = None
+
+
+class TaskOut(BaseModel):
+    id: int
+    title: str
+    description: Optional[str] = None
+    completed: bool
+    created_at: datetime
+
+    class Config:
+        from_attributes = True
+
+
 # Focus Session Models
 class FocusSessionRequest(BaseModel):
     """Request for focus session."""
@@ -127,6 +158,16 @@ class MoodCheckResponse(BaseModel):
     recommended_activities: List[str] = Field(default=[], description="Suggested activities")
     escalation_needed: bool = Field(default=False, description="Whether professional help is recommended")
     follow_up_time: Optional[datetime] = Field(default=None, description="Recommended follow-up time")
+
+
+class MoodLogOut(BaseModel):
+    id: int
+    mood_score: int
+    notes: Optional[str] = None
+    created_at: datetime
+
+    class Config:
+        from_attributes = True
 
 
 # Organization Models
