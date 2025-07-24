@@ -3,7 +3,12 @@
  */
 
 import apiClient, { handleApiResponse, handleApiError } from './api';
-import { TaskBreakdownRequest, TaskBreakdownResponse } from './types';
+import {
+  TaskBreakdownRequest,
+  TaskBreakdownResponse,
+  TaskCreate,
+  TaskOut,
+} from './types';
 
 export class TaskService {
   /**
@@ -13,6 +18,35 @@ export class TaskService {
     try {
       const response = await apiClient.post<TaskBreakdownResponse>('/api/v1/tasks/breakdown', request);
       return handleApiResponse(response);
+    } catch (error) {
+      throw new Error(handleApiError(error));
+    }
+  }
+
+  /** Create a new task for the current user */
+  static async createTask(task: TaskCreate): Promise<TaskOut> {
+    try {
+      const response = await apiClient.post<TaskOut>('/api/v1/tasks', task);
+      return handleApiResponse(response);
+    } catch (error) {
+      throw new Error(handleApiError(error));
+    }
+  }
+
+  /** Fetch tasks for the current user */
+  static async listTasks(): Promise<TaskOut[]> {
+    try {
+      const response = await apiClient.get<TaskOut[]>('/api/v1/tasks');
+      return handleApiResponse(response);
+    } catch (error) {
+      throw new Error(handleApiError(error));
+    }
+  }
+
+  /** Delete a task by id */
+  static async deleteTask(taskId: number): Promise<void> {
+    try {
+      await apiClient.delete(`/api/v1/tasks/${taskId}`);
     } catch (error) {
       throw new Error(handleApiError(error));
     }

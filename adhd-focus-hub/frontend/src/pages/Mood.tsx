@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { MoodService, ChatService } from '../services';
-import { Heart, Brain, Zap, MessageCircle } from 'lucide-react';
+import { MoodService } from '../services';
+import { Heart, Brain } from 'lucide-react';
 
 const Mood: React.FC = () => {
   const [moodScore, setMoodScore] = useState(5);
@@ -205,48 +205,8 @@ const Mood: React.FC = () => {
 
       {/* Response from emotional support agent */}
       {response && (
-        <div className="bg-green-50 border border-green-200 rounded-lg p-6">
-          <h3 className="font-semibold text-green-800 mb-4 flex items-center gap-2">
-            <MessageCircle className="text-green-600" size={20} />
-            Emotional Support Response
-          </h3>
-          
-          <div className="space-y-4">
-            <div>
-              <h4 className="font-medium text-green-800 mb-2">Analysis:</h4>
-              <p className="text-green-700">{response.analysis}</p>
-            </div>
-
-            {response.coping_strategies && response.coping_strategies.length > 0 && (
-              <div>
-                <h4 className="font-medium text-green-800 mb-2">Coping Strategies:</h4>
-                <ul className="list-disc list-inside space-y-1 text-green-700">
-                  {response.coping_strategies.map((strategy: string, index: number) => (
-                    <li key={index}>{strategy}</li>
-                  ))}
-                </ul>
-              </div>
-            )}
-
-            {response.recommended_activities && response.recommended_activities.length > 0 && (
-              <div>
-                <h4 className="font-medium text-green-800 mb-2">Recommended Activities:</h4>
-                <ul className="list-disc list-inside space-y-1 text-green-700">
-                  {response.recommended_activities.map((activity: string, index: number) => (
-                    <li key={index}>{activity}</li>
-                  ))}
-                </ul>
-              </div>
-            )}
-
-            {response.escalation_needed && (
-              <div className="bg-yellow-100 border border-yellow-300 rounded p-3">
-                <p className="text-yellow-800 font-medium">
-                  ⚠️ Consider reaching out to a mental health professional for additional support.
-                </p>
-              </div>
-            )}
-          </div>
+        <div className="bg-green-50 border border-green-200 rounded-lg p-6 text-green-800">
+          Mood logged at {new Date(response.created_at).toLocaleString()}
         </div>
       )}
     </div>
