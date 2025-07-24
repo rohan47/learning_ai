@@ -11,14 +11,19 @@ from backend.database import Base, engine, SessionLocal
 
 @pytest.fixture(autouse=True, scope="module")
 def setup_db():
+    """Create and tear down database tables for tests."""
+    import asyncio
+    if os.path.exists("/tmp/test.db"):
+        os.remove("/tmp/test.db")
+
     async def init_db():
         async with engine.begin() as conn:
             await conn.run_sync(Base.metadata.create_all)
+
     async def teardown():
         async with engine.begin() as conn:
             await conn.run_sync(Base.metadata.drop_all)
 
-    import asyncio
     asyncio.run(init_db())
     yield
     asyncio.run(teardown())
