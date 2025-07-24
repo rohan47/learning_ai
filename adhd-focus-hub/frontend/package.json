@@ -1,0 +1,50 @@
+{
+  "name": "adhd-focus-hub-frontend",
+  "version": "1.0.0",
+  "private": true,
+  "description": "ADHD Focus Hub frontend with React and TypeScript",
+  "dependencies": {
+    "@types/node": "^20.12.7",
+    "@types/react": "^18.3.23",
+    "@types/react-dom": "^18.3.7",
+    "axios": "^1.6.8",
+    "clsx": "^2.1.1",
+    "lucide-react": "^0.376.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-router-dom": "^6.23.0",
+    "react-scripts": "5.0.1",
+    "typescript": "^4.9.5",
+    "web-vitals": "^3.5.2"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject",
+    "type-check": "tsc --noEmit"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "devDependencies": {
+    "@testing-library/jest-dom": "^6.4.5",
+    "@testing-library/react": "^15.0.6",
+    "@testing-library/user-event": "^14.5.2"
+  }
+}
