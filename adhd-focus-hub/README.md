@@ -306,10 +306,6 @@ cd frontend
 npm run lint
 ```
 
-## Development Guide
-
-This project previously included optional Codex CLI agents in `adhd-focus-hub/dev_agents`. Those helpers have been removed, so development is performed manually. See [AGENTS.md](../AGENTS.md) for the roadmap and task breakdown.
-
 ## 🚀 Deployment
 
 ### Docker Production
@@ -327,17 +323,6 @@ environment variables before running the stack.
 3. **Database**: Use managed PostgreSQL (AWS RDS, Digital Ocean, etc.)
 4. **Redis**: Use managed Redis service
 
-## 🤝 Contributing
-
-We welcome contributions! Please see our contributing guidelines for:
-- Code style and standards
-- ADHD-aware UX principles
-- Accessibility requirements
-- Testing procedures
-
-## 📄 License
-
-License information to be determined.
 
 ## 🙏 Acknowledgments
 
