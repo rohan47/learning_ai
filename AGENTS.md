@@ -1,8 +1,4 @@
-# Development Guide
-
-This repository originally provided CrewAI-based development agents for use with the Codex CLI. The `adhd-focus-hub/dev_agents` directory has been removed, so development is now performed manually. The roles and tasks below remain useful as a planning reference.
-
-## Agents
+# AGENTS.md
 
 | Agent | Role |
 |-------|------|
