@@ -25,8 +25,8 @@ load_dotenv()
 
 class ADHDFocusHubCrew:
     """ADHD Focus Hub CrewAI implementation."""
-    
-    def __init__(self):
+
+    def __init__(self, max_history: Optional[int] = None):
         """Initialize the crew with all ADHD support agents."""
         # Configure Perplexity LLM
         self.llm = LLM(
@@ -51,7 +51,14 @@ class ADHDFocusHubCrew:
             "orchestrator": self.orchestrator_agent
         }
         
-        self.conversation_history = []
+        self.max_history = max_history or int(os.getenv("CREW_MAX_HISTORY", "50"))
+        self.conversation_history: List[Dict[str, Any]] = []
+
+    def _trim_history(self) -> None:
+        """Trim conversation history to the max allowed length."""
+        if self.max_history and len(self.conversation_history) > self.max_history:
+            excess = len(self.conversation_history) - self.max_history
+            self.conversation_history = self.conversation_history[excess:]
     
     def route_request(self, user_input: str, context: Dict[str, Any] = None) -> Dict[str, Any]:
         """Intelligent routing to appropriate agent(s)."""
@@ -99,6 +106,7 @@ class ADHDFocusHubCrew:
             "output": final_result,
             "timestamp": datetime.utcnow().isoformat()
         })
+        self._trim_history()
         
         return final_result
     
@@ -141,6 +149,7 @@ class ADHDFocusHubCrew:
                 "timestamp": datetime.utcnow().isoformat(),
                 "consultation_type": "comprehensive"
             })
+            self._trim_history()
             
             return orchestrator_result
             
