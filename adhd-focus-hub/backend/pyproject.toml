@@ -39,6 +39,7 @@ dependencies = [
     "python-dotenv>=1.0.1",
     "psutil>=5.9.8",
     "aiofiles>=23.2.1",
+    "aiosqlite>=0.21.0",
 ]
 
 [project.optional-dependencies]

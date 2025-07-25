@@ -36,3 +36,7 @@ This roadmap should keep all agents aligned as the project progresses.
 | 4 | **Authentication** | - Implement JWT-based auth in FastAPI.<br>- Protect endpoints with `HTTPBearer`.<br>- Create login/register routes.<br>- Add token storage in frontend. | Auth API and middleware. | Login and protected routes work with valid tokens. | 2 days | ✅ Completed |
 | 5 | **Frontend Integration** | - Update services in `frontend/src/services` to call backend APIs with auth tokens.<br>- Build login and registration pages.<br>- Connect task and mood pages to backend. | Working frontend communicating with backend. | Users can authenticate and CRUD data from UI. | 2 days | ✅ Completed |
 | 6 | **Comprehensive Testing** | - Expand `test_tools.py` into pytest suite.<br>- Cover all API endpoints and auth flow.<br>- Add CI instructions. | Pytest tests under `tests/` directory. | Test suite passes locally and in CI. | 1.5 days | ✅ Completed |
+
+## Known Issues
+
+- **Database module imports**: The application imports `database` while tests imported `backend.database`, creating two separate SQLAlchemy `Base` instances. This caused tables to be missing during tests. Tests were updated to import from `database`, but backend modules should standardize on a single package path.

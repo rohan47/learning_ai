@@ -6,7 +6,10 @@ from sqlalchemy.ext.asyncio import AsyncSession
 os.environ["DATABASE_URL"] = "sqlite+aiosqlite:////tmp/test.db"
 
 from backend.api.main import app, get_db
-from backend.database import Base, engine, SessionLocal
+# Import database objects using the same module path as the application.
+# The app imports `database.models`, so we need to use the same package to
+# ensure the SQLAlchemy Base instance is shared during testing.
+from database import Base, engine, SessionLocal
 
 
 @pytest.fixture(autouse=True, scope="module")
