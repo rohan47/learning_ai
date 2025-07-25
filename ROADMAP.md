@@ -8,10 +8,11 @@ Each milestone is ordered by priority with an estimated time to complete.
 |---------|----------|-----------|--------------|-----------------|-----------|--------|
 | 1 | **Orchestrator Alignment** | - Refactor `OrchestratorAgent` to extend `BaseADHDAgent`.<br>- Add context storage and conversation history.<br>- Update crew integration and unit tests. | Unified orchestrator with base features. | Tests confirm orchestration with stored context. | 1 day | ✅ Completed |
 | 2 | **Deployment** | - Create Docker compose for backend/frontend.<br>- Document deployment steps.<br>- Push images to container registry. | Dockerfiles and compose config for production. | Application deploys successfully on staging environment. | 1.5 days | ⏳ Pending |
+| 3 | **Frontend-Backend Alignment** | - Audit API endpoints and React services.<br>- Resolve route mismatches such as mood logging.<br>- Document the final API contract. | Unified interface between layers. | Frontend calls all endpoints without errors. | 0.5 day | ⏳ Pending |
 
 ## Timeline Overview
 
-Milestones 1–6 are complete. Orchestrator alignment and deployment remain, totaling approximately **2.5 days** of work. Adjust as necessary based on team availability.
+Milestones 1–6 are complete. Orchestrator alignment, deployment, and frontend-backend alignment remain, totaling approximately **3.0 days** of work. Adjust as necessary based on team availability.
 
 ## Usage by Agents
 
