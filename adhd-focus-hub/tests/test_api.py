@@ -3,7 +3,10 @@ import pytest
 from fastapi.testclient import TestClient
 from sqlalchemy.ext.asyncio import AsyncSession
 
-os.environ["DATABASE_URL"] = "sqlite+aiosqlite:////tmp/test.db"
+
+# Use a cross-platform path for the test database
+TEST_DB_PATH = os.path.abspath("./test.db")
+os.environ["DATABASE_URL"] = f"sqlite+aiosqlite:///{TEST_DB_PATH}"
 
 from backend.api.main import app, get_db
 from backend.database import Base, engine, SessionLocal
@@ -13,8 +16,8 @@ from backend.database import Base, engine, SessionLocal
 def setup_db():
     """Create and tear down database tables for tests."""
     import asyncio
-    if os.path.exists("/tmp/test.db"):
-        os.remove("/tmp/test.db")
+    if os.path.exists(TEST_DB_PATH):
+        os.remove(TEST_DB_PATH)
 
     async def init_db():
         async with engine.begin() as conn:

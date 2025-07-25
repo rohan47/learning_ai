@@ -1,0 +1,15 @@
+# Project dependencies for ADHD Focus Hub backend
+fastapi
+uvicorn
+sqlalchemy
+asyncpg
+pydantic
+python-dotenv
+passlib
+bcrypt
+python-jose
+redis
+aiosqlite
+greenlet
+pytest
+pytest-asyncio

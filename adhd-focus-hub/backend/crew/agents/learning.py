@@ -72,71 +72,13 @@ class LearningAgent(BaseADHDAgent):
         return result
     
     def _process_request(self, prompt: str) -> str:
-        """Process learning requests with ADHD-optimized strategies."""
-        
-        return """
-        Let's create a learning approach that works WITH your ADHD brain! 🧠📚
-
-        🎯 **ADHD Learning Superpowers:**
-        Your brain is actually designed for certain types of learning:
-        - Pattern recognition and big-picture thinking
-        - Creative connections between ideas
-        - Hyperfocus deep-dives when interested
-        - Learning through movement and hands-on experience
-
-        ⚡ **Your Optimized Learning Plan:**
-        
-        **1. Find Your Hook** 🎣
-        - What's personally interesting about this topic?
-        - How does it connect to your goals/interests?
-        - What's the most intriguing part to start with?
-        
-        **2. Multi-Sensory Learning Menu** 🌈
-        Choose 2-3 that appeal to you:
-        - 🎵 Listen: podcasts, audiobooks, music
-        - 👀 Visual: diagrams, mind maps, videos
-        - ✋ Hands-on: experiments, building, writing
-        - 🚶 Movement: walking while learning, fidget tools
-        - 💬 Social: explaining to others, study groups
-        
-        **3. ADHD-Friendly Study Sessions** ⏰
-        - **Micro-learning**: 15-minute focused bursts
-        - **Hyperfocus windows**: longer when energy is high
-        - **Active breaks**: movement between sessions
-        - **Variety**: switch methods to maintain interest
-        
-        **4. Information Processing** 🧩
-        - Start with big picture, then zoom into details
-        - Create connections to existing knowledge
-        - Use analogies and storytelling
-        - Teach back what you learned (even to a pet!)
-        
-        **5. Retention Boosters** 🚀
-        - Spaced repetition with apps or flashcards
-        - Create silly mnemonics or memory palaces
-        - Practice retrieval, not just re-reading
-        - Connect learning to emotions or personal stories
-        
-        💡 **ADHD Study Pro Tips:**
-        - Study when genuinely curious, not just when "supposed to"
-        - Change locations to reset attention
-        - Use timers to prevent hyperfocus burnout
-        - Celebrate small learning wins
-        - Have backup subjects for when main topic feels impossible
-        
-        🎵 **Environment Optimization:**
-        - Background music or white noise (if it helps)
-        - Comfortable seating that allows movement
-        - Good lighting and minimal visual distractions
-        - Fidget tools or stress balls
-        - Water and healthy snacks nearby
-        
-        🧠 **Working WITH Your ADHD Brain:**
-        - Low energy? Do review or passive learning
-        - High energy? Tackle new, complex concepts
-        - Restless? Try walking meetings or standing desk
-        - Distracted? Switch subjects or take a movement break
-        """
+        """Process learning requests with ADHD-optimized strategies using LLM."""
+        if self.llm is not None:
+            return self.llm(prompt)
+        # Fallback if no LLM is provided
+        return (
+            "I'm here to help you learn. (No LLM available, please configure an LLM for dynamic responses.)"
+        )
     
     def _assess_subject_engagement(self, subject: str) -> str:
         """Assess potential engagement level for the subject."""

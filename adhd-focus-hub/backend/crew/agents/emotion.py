@@ -67,50 +67,13 @@ class EmotionalSupportAgent(BaseADHDAgent):
         return result
     
     def _process_request(self, prompt: str) -> str:
-        """Process emotional support requests with ADHD understanding."""
-        
-        return """
-        I hear you, and what you're feeling makes complete sense. 💙
-
-        🤗 **First, some validation:**
-        Your ADHD brain experiences emotions differently - more intensely, for longer periods. 
-        This isn't a flaw; it's how your brain is wired. You're not "too sensitive" or "overreacting."
-
-        🧠 **What's happening in your ADHD brain:**
-        - Emotions feel bigger because of how ADHD brains process dopamine
-        - Executive dysfunction can make it harder to regulate feelings
-        - RSD (rejection sensitivity) can amplify social/performance stress
-        - Low dopamine can make everything feel harder
-
-        💪 **Gentle coping strategies:**
-        
-        **For overwhelm:**
-        - Name 3 things you can see, 2 you can hear, 1 you can touch
-        - Take 5 slow, deep breaths
-        - Remind yourself: "This feeling will pass"
-        
-        **For shame spirals:**
-        - "My brain works differently, and that's okay"
-        - "I'm doing my best with the energy I have"
-        - "One small step is still progress"
-        
-        **For motivation dips:**
-        - Lower the bar (what's the smallest possible step?)
-        - Change your environment or switch tasks
-        - Connect with your 'why' or values
-        - Seek gentle accountability or body doubling
-
-        🌟 **Remember:**
-        - Your ADHD traits include creativity, empathy, and unique perspectives
-        - Bad brain days don't define your worth
-        - Needing different strategies isn't weakness
-        - You belong exactly as you are
-
-        🔄 **Next steps:**
-        - Would gentle movement help right now?
-        - Is there one tiny thing you could do for yourself?
-        - Who in your support network could you reach out to?
-        """
+        """Process emotional support requests with ADHD understanding using LLM."""
+        if self.llm is not None:
+            return self.llm(prompt)
+        # Fallback if no LLM is provided
+        return (
+            "I'm here to support you. (No LLM available, please configure an LLM for dynamic responses.)"
+        )
     
     def _analyze_mood_pattern(self, mood_data: Dict[str, Any]) -> Dict[str, Any]:
         """Analyze mood patterns with ADHD considerations."""

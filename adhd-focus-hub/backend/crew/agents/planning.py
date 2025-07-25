@@ -240,28 +240,13 @@ class PlanningAgent(BaseADHDAgent):
             return self._fallback_priority_response(prompt)
     
     def _handle_general_planning_request(self, prompt: str) -> str:
-        """Handle general planning requests."""
-        # For general requests, provide a comprehensive ADHD planning response
-        return """🎯 ADHD Planning Support Ready!
-
-I can help you with:
-
-⏰ Time Estimation - 'How long will X take?'
-• Accounts for ADHD time blindness
-• Includes buffer time and breaks
-• Breaks into focus-friendly chunks
-
-📋 Task Breakdown - 'Break down this complex task'
-• Splits overwhelming tasks into 15-25 min chunks
-• Provides ADHD-specific tips for each step
-• Includes prep, focus, and recovery phases
-
-🎯 Priority Assessment - 'Help me prioritize these tasks'
-• Considers energy levels and dopamine potential
-• Matches tasks to your current state
-• Suggests optimal timing
-
-What would you like help with today? Just tell me about your task or ask for time estimates, breakdowns, or prioritization!"""
+        """Handle general planning requests using LLM."""
+        if self.llm is not None:
+            return self.llm(prompt)
+        # Fallback if no LLM is provided
+        return (
+            "I'm here to help you plan. (No LLM available, please configure an LLM for dynamic responses.)"
+        )
     
     def _calculate_focus_sessions(self, result: Dict) -> int:
         """Calculate recommended number of focus sessions."""

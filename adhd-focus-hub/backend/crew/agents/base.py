@@ -31,6 +31,22 @@ class BaseADHDAgent:
         self.role = self.agent.role
         self.goal = self.agent.goal
         self.backstory = self.agent.backstory
+from .redis_comm import RedisAgentComm
+
+# Example: Synchronous agent communication using Redis
+class RedisAgentMixin:
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.redis_comm = RedisAgentComm()
+
+    def send_message(self, channel: str, message: dict):
+        self.redis_comm.publish(channel, message)
+
+    def listen_messages(self, channel: str):
+        pubsub = self.redis_comm.subscribe(channel)
+        for msg in pubsub.listen():
+            if msg['type'] == 'message':
+                yield msg['data']
     
     def execute_with_context(
         self, 

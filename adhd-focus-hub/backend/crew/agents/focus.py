@@ -67,44 +67,13 @@ class FocusCoachAgent(BaseADHDAgent):
         return result
     
     def _process_request(self, prompt: str) -> str:
-        """Process focus session requests with ADHD expertise."""
-        
-        return """
-        Let's set up a focus session that works WITH your ADHD brain! 🧠✨
-
-        🎯 **Your Adaptive Focus Plan:**
-        - **Warm-up** (2-3 mins): Quick brain dump, set intention, eliminate distractions
-        - **Focus Block** (15-25 mins): Single-task focus with timer
-        - **Active Break** (5-10 mins): Movement, hydration, reset
-        - **Optional Round 2**: If energy allows, another focused block
-
-        ⚡ **Focus Techniques Menu:**
-        Choose what feels right today:
-        - 🎵 Focus music or brown noise
-        - 🍅 Visual timer (seeing time helps ADHD brains)
-        - 📱 Phone in another room
-        - 🎯 "One thing only" mantra
-        - 🤝 Body doubling (virtual or in-person)
-
-        🏠 **Environment Setup:**
-        - Comfortable temperature
-        - Good lighting
-        - Fidget tools available
-        - Water and snacks nearby
-        - Backup task ready (if main task feels impossible)
-
-        💪 **Motivation Boosters:**
-        - Start with the most interesting part
-        - Set a "minimum viable progress" goal
-        - Reward yourself after the session
-        - Remember: ANY progress counts!
-
-        🚨 **If Focus Breaks:**
-        - No judgment! ADHD brains work differently
-        - Gently redirect attention back
-        - Take a micro-break if needed
-        - Switch to backup task if original feels overwhelming
-        """
+        """Process focus session requests with ADHD expertise using LLM."""
+        if self.llm is not None:
+            return self.llm(prompt)
+        # Fallback if no LLM is provided
+        return (
+            "I'm here to help you focus. (No LLM available, please configure an LLM for dynamic responses.)"
+        )
     
     def _calculate_optimal_duration(self, context: Dict[str, Any], requested_duration: int = None) -> int:
         """Calculate optimal focus duration based on current state."""
