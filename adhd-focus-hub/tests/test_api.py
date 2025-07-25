@@ -6,6 +6,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 os.environ["DATABASE_URL"] = "sqlite+aiosqlite:////tmp/test.db"
 
 from backend.api.main import app, get_db, get_crew
+
 # Import database objects using the same module path as the application.
 # The app imports `database.models`, so we need to use the same package to
 # ensure the SQLAlchemy Base instance is shared during testing.
@@ -16,6 +17,7 @@ from database import Base, engine, SessionLocal
 def setup_db():
     """Create and tear down database tables for tests."""
     import asyncio
+
     if os.path.exists("/tmp/test.db"):
         os.remove("/tmp/test.db")
 
@@ -80,7 +82,13 @@ def test_task_crud_and_moods():
 
         resp = client.post(
             "/api/v1/moods",
-            json={"mood_score": 5, "energy_level": 5, "stress_level": 5, "notes": "ok", "triggers": []},
+            json={
+                "mood_score": 5,
+                "energy_level": 5,
+                "stress_level": 5,
+                "notes": "ok",
+                "triggers": [],
+            },
             headers=headers,
         )
         assert resp.status_code == 200
@@ -156,3 +164,42 @@ def test_organize_and_learn_endpoints(override_crew):
         assert "learning_plan" in data
         assert "retention_methods" in data
 
+
+class DummyChatCrew:
+    async def async_route_request(self, message, context=None):
+        return {"response": "ok", "primary_agent": "planning", "metadata": {}}
+
+
+@pytest.fixture
+def override_chat_crew():
+    crew = DummyChatCrew()
+    app.dependency_overrides[get_crew] = lambda: crew
+    yield
+    app.dependency_overrides.pop(get_crew, None)
+
+
+def test_chat_history_persistence(monkeypatch, override_chat_crew):
+    saved = {}
+
+    async def fake_push(user_id, record):
+        saved["record"] = record
+
+    monkeypatch.setattr("backend.api.routes.chat.push_history", fake_push)
+
+    with TestClient(app) as client:
+        resp = client.post("/api/v1/chat", json={"message": "hello"})
+        assert resp.status_code == 200
+
+    import asyncio
+    from sqlalchemy import select
+    from database.models import ConversationHistory
+
+    async def fetch():
+        async with SessionLocal() as session:
+            result = await session.execute(select(ConversationHistory))
+            return result.scalars().all()
+
+    records = asyncio.run(fetch())
+    assert len(records) == 1
+    assert records[0].message == "hello"
+    assert saved["record"]["message"] == "hello"

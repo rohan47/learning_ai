@@ -1,10 +1,11 @@
 from __future__ import annotations
 
 from datetime import datetime
-from sqlalchemy import Integer, String, Boolean, DateTime, ForeignKey
+from sqlalchemy import Integer, String, Boolean, DateTime, ForeignKey, Text, JSON
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from . import Base
+
 
 class User(Base):
     __tablename__ = "users"
@@ -16,6 +17,7 @@ class User(Base):
 
     tasks: Mapped[list[Task]] = relationship("Task", back_populates="owner")
     moods: Mapped[list[MoodLog]] = relationship("MoodLog", back_populates="owner")
+
 
 class Task(Base):
     __tablename__ = "tasks"
@@ -29,6 +31,7 @@ class Task(Base):
 
     owner: Mapped[User] = relationship("User", back_populates="tasks")
 
+
 class MoodLog(Base):
     __tablename__ = "mood_logs"
 
@@ -39,3 +42,16 @@ class MoodLog(Base):
     created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
 
     owner: Mapped[User] = relationship("User", back_populates="moods")
+
+
+class ConversationHistory(Base):
+    __tablename__ = "conversation_history"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, index=True)
+    user_id: Mapped[int | None] = mapped_column(ForeignKey("users.id"), nullable=True)
+    message: Mapped[str] = mapped_column(Text)
+    response: Mapped[str] = mapped_column(Text)
+    metadata_json: Mapped[dict | None] = mapped_column(JSON, nullable=True)
+    created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
+
+    user: Mapped[User | None] = relationship("User")
