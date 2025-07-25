@@ -306,10 +306,9 @@ cd frontend
 npm run lint
 ```
 
-## Development Agents
+## Development Guide
 
-See [AGENT.md](../AGENT.md) for a list of Codex development agents, how to start them, and example workflows.
-If the `codex` CLI isn't installed, execute `./scripts/install_codex.sh` from the repository root.
+This project previously included optional Codex CLI agents in `adhd-focus-hub/dev_agents`. Those helpers have been removed, so development is performed manually. See [AGENTS.md](../AGENTS.md) for the roadmap and task breakdown.
 
 ## 🚀 Deployment
 
