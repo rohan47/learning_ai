@@ -6,21 +6,18 @@ Each milestone is ordered by priority with an estimated time to complete.
 
 | Priority | Milestone | Key Tasks | Deliverables | Success Criteria | Est. Time | Status |
 |---------|----------|-----------|--------------|-----------------|-----------|--------|
-| 1 | **Deployment** | - Create Docker compose for backend/frontend.<br>- Document Docker architecture and deployment steps.<br>- Push images to container registry. | Dockerfiles and compose config for production. | Application deploys successfully on staging environment. | 1.5 days | ⏳ Pending |
-| 2 | **Frontend-Backend Alignment** | - Audit API endpoints and React services.<br>- Resolve route mismatches such as mood logging.<br>- Document the final API contract. | Unified interface between layers. | Frontend calls all endpoints without errors. | 0.5 day | ⏳ Pending |
-| 3 | **Organization & Learning Endpoints** | - **Backend:** `/api/v1/organize` and `/api/v1/learn` implemented with tests.<br>- **Frontend:** add services and UI components to consume these routes. | Endpoints ready; React work outstanding. | Users access organization and learning help via UI once frontend updated. | 1 day | ⚠️ Frontend pending |
-| 4 | **Redis Integration** | - Connect to Redis via `REDIS_URL`.<br>- Persist conversation history.<br>- Document caching setup. | Redis-backed caching layer. | History survives restarts. | 1 day | ⏳ Pending |
-| 5 | **CI/CD Pipeline** | - Add GitHub Actions for tests and linting.<br>- Build Docker images on push.<br>- Deploy to staging automatically. | Automated CI workflow. | Tests run on each PR and images build. | 1 day | ⏳ Pending |
-| 6 | **License File** | - Add MIT LICENSE file and reference in README. | LICENSE file. | Repository explicitly licensed. | 0.1 day | ⏳ Pending |
+| 11 | **Redis Integration** | - Connect to Redis via `REDIS_URL`.<br>- Persist conversation history.<br>- Document caching setup. | Redis-backed caching layer. | History survives restarts. | 1 day | ⏳ Pending |
+| 12 | **CI/CD Pipeline** | - Add GitHub Actions for tests and linting.<br>- Build Docker images on push.<br>- Deploy to staging automatically. | Automated CI workflow. | Tests run on each PR and images build. | 1 day | ⏳ Pending |
+| 13 | **License File** | - Add MIT LICENSE file and reference in README. | LICENSE file. | Repository explicitly licensed. | 0.1 day | ⏳ Pending |
 ## Timeline Overview
 
-Milestones 1-7 are complete. Remaining work covers deployment, frontend-backend alignment, organization and learning endpoints, Redis integration, CI/CD pipeline, and license setup, totaling approximately **5.1 days** of work. Adjust as necessary based on team availability.
+Milestones 1-10 are complete. Remaining work covers Redis integration, CI/CD pipeline, and license setup, totaling approximately **2.1 days** of work.
 
 ## Usage by Agents
 
-- **BackendDeveloper** focuses on milestones 1–4.
-- **FrontendDeveloper** tackles milestones 4–5.
-- **QATester** covers milestone 6.
+- **BackendDeveloper** focuses on milestone 11 for Redis integration.
+- **FrontendDeveloper** collaborates on milestone 12 for the CI/CD pipeline.
+- **QATester** verifies licensing in milestone 13.
 - **DocsWriter** updates documentation across all milestones.
 - **BackendArchitect** reviews backend design and guides deployment.
 - **FrontendArchitect** defines component architecture and performance standards.
@@ -40,6 +37,9 @@ This roadmap should keep all agents aligned as the project progresses.
 | 6 | **Comprehensive Testing** | - Expand `test_tools.py` into pytest suite.<br>- Cover all API endpoints and auth flow.<br>- Add CI instructions. | Pytest tests under `tests/` directory. | Test suite passes locally and in CI. | 1.5 days | ✅ Completed |
 
 | 7 | **Orchestrator Alignment** | - Refactor `OrchestratorAgent` to extend `BaseADHDAgent`.<br>- Add context storage and conversation history.<br>- Update crew integration and unit tests. | Unified orchestrator with base features. | Tests confirm orchestration with stored context. | 1 day | ✅ Completed |
+| 8 | **Deployment** | - Create Docker compose for backend/frontend.<br>- Document Docker architecture and deployment steps.<br>- Push images to container registry. | Dockerfiles and compose config for production. | Application deploys successfully on staging environment. | 1.5 days | ✅ Completed |
+| 9 | **Frontend-Backend Alignment** | - Audit API endpoints and React services.<br>- Resolve route mismatches such as mood logging.<br>- Document the final API contract. | Unified interface between layers. | Frontend calls all endpoints without errors. | 0.5 day | ✅ Completed |
+| 10 | **Organization & Learning Endpoints** | - **Backend:** `/api/v1/organize` and `/api/v1/learn` implemented with tests.<br>- **Frontend:** add services and UI components to consume these routes. | Endpoints ready and UI components built. | Users access organization and learning help via UI. | 1 day | ✅ Completed |
 ## Known Issues
 
 - **Database module imports**: The application imports `database` while tests imported `backend.database`, creating two separate SQLAlchemy `Base` instances. This caused tables to be missing during tests. Tests were updated to import from `database`, but backend modules should standardize on a single package path.
