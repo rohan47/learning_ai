@@ -12,11 +12,23 @@ import {
 
 export class MoodService {
   /**
-   * Log mood and get emotional support
+   * Persist a mood entry for the current user
    */
   static async logMood(request: MoodCheckRequest): Promise<MoodLogOut> {
     try {
       const response = await apiClient.post<MoodLogOut>('/api/v1/moods', request);
+      return handleApiResponse(response);
+    } catch (error) {
+      throw new Error(handleApiError(error));
+    }
+  }
+
+  /**
+   * Get mood analysis and coping suggestions using the emotion agent
+   */
+  static async checkMood(request: MoodCheckRequest): Promise<MoodCheckResponse> {
+    try {
+      const response = await apiClient.post<MoodCheckResponse>('/api/v1/mood/log', request);
       return handleApiResponse(response);
     } catch (error) {
       throw new Error(handleApiError(error));
