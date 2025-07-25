@@ -309,6 +309,7 @@ npm run lint
 ## Development Agents
 
 See [AGENT.md](../AGENT.md) for a list of Codex development agents, how to start them, and example workflows.
+If the `codex` CLI isn't installed, execute `./scripts/install_codex.sh` from the repository root.
 
 ## 🚀 Deployment
 

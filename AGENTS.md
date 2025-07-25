@@ -22,6 +22,11 @@ Before running any agents, set your `OPENAI_API_KEY` environment variable:
 export OPENAI_API_KEY=your_openai_api_key
 ```
 
+If the `codex` command is missing, run the helper script to install it:
+```bash
+./scripts/install_codex.sh
+```
+
 Start Codex with any combination of these agents. Example:
 ```bash
 codex agents start LeadPlanner BackendDeveloper FrontendDeveloper QATester DocsWriter
