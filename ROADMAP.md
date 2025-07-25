@@ -6,7 +6,7 @@ Each milestone is ordered by priority with an estimated time to complete.
 
 | Priority | Milestone | Key Tasks | Deliverables | Success Criteria | Est. Time | Status |
 |---------|----------|-----------|--------------|-----------------|-----------|--------|
-| 1 | **Deployment** | - Create Docker compose for backend/frontend.<br>- Document deployment steps.<br>- Push images to container registry. | Dockerfiles and compose config for production. | Application deploys successfully on staging environment. | 1.5 days | ⏳ Pending |
+| 1 | **Deployment** | - Create Docker compose for backend/frontend.<br>- Document Docker architecture and deployment steps.<br>- Push images to container registry. | Dockerfiles and compose config for production. | Application deploys successfully on staging environment. | 1.5 days | ⏳ Pending |
 | 2 | **Frontend-Backend Alignment** | - Audit API endpoints and React services.<br>- Resolve route mismatches such as mood logging.<br>- Document the final API contract. | Unified interface between layers. | Frontend calls all endpoints without errors. | 0.5 day | ⏳ Pending |
 | 3 | **Organization & Learning Endpoints** | - Implement `/api/v1/organize` and `/api/v1/learn` routes.<br>- Add services in React.<br>- Write tests for endpoints. | Endpoints with frontend services. | Users access organization and learning help via UI. | 1 day | ⏳ Pending |
 | 4 | **Redis Integration** | - Connect to Redis via `REDIS_URL`.<br>- Persist conversation history.<br>- Document caching setup. | Redis-backed caching layer. | History survives restarts. | 1 day | ⏳ Pending |
