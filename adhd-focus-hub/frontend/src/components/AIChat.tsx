@@ -17,11 +17,18 @@ interface Message {
 }
 
 interface AIChatProps {
-  isOpen: boolean;
-  onClose: () => void;
+  /** Whether the chat is open (for overlay mode) */
+  isOpen?: boolean;
+  /** Close handler for overlay mode */
+  onClose?: () => void;
+  /**
+   * Rendering mode: "overlay" for modal-like behavior or "page" for full page
+   * chat interface.
+   */
+  mode?: 'overlay' | 'page';
 }
 
-const AIChat: React.FC<AIChatProps> = ({ isOpen, onClose }) => {
+const AIChat: React.FC<AIChatProps> = ({ isOpen = true, onClose, mode = 'overlay' }) => {
   const [messages, setMessages] = useState<Message[]>([
     {
       id: '1',
@@ -130,10 +137,16 @@ const AIChat: React.FC<AIChatProps> = ({ isOpen, onClose }) => {
     }
   };
 
-  if (!isOpen) return null;
+  if (mode === 'overlay' && !isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+    <div
+      className={
+        mode === 'overlay'
+          ? 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4'
+          : 'flex justify-center p-4'
+      }
+    >
       <div className="w-full max-w-2xl h-[80vh] bg-white rounded-lg shadow-xl flex flex-col">
         {/* Header */}
         <div className="p-4 border-b border-gray-200 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-t-lg">
@@ -149,12 +162,14 @@ const AIChat: React.FC<AIChatProps> = ({ isOpen, onClose }) => {
               >
                 Clear
               </button>
-              <button
-                onClick={onClose}
-                className="p-2 hover:bg-white hover:bg-opacity-50 rounded-lg transition-colors"
-              >
-                <X size={20} className="text-gray-600" />
-              </button>
+              {mode === 'overlay' && onClose && (
+                <button
+                  onClick={onClose}
+                  className="p-2 hover:bg-white hover:bg-opacity-50 rounded-lg transition-colors"
+                >
+                  <X size={20} className="text-gray-600" />
+                </button>
+              )}
             </div>
           </div>
           
