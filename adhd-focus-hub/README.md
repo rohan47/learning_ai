@@ -94,7 +94,7 @@ cp .env.example .env
 # Edit .env with your configuration
 
 # Start all services
-docker-compose up --build
+../scripts/dev_compose.sh
 ```
 
 The application will be available at:
@@ -106,7 +106,8 @@ The default `docker-compose.yml` is optimized for local development. It mounts
 the source code into the containers and enables automatic reloads when files
 change. For a production deployment, use
 `docker-compose.production.yml` which builds the images once and runs them
-without any source-code volumes. All configuration values should be supplied via
+without any source-code volumes. You can start it with
+`../scripts/prod_compose.sh`. All configuration values should be supplied via
 environment variables.
 
 ## 🏗️ Project Structure
@@ -311,7 +312,7 @@ npm run lint
 ### Docker Production
 ```bash
 # Build and run production containers
-docker-compose -f docker-compose.production.yml up --build -d
+../scripts/prod_compose.sh
 ```
 This compose file uses the Docker images defined in the repository and does not
 mount the application source code. Provide all secrets and URLs through
