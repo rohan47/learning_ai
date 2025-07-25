@@ -83,5 +83,5 @@ Below is the current development plan. Each agent should focus on the tasks in t
 - Update `README.md` with setup instructions for `.env.example`, database initialization, and running backend and frontend services.
 - Document new authentication routes and CRUD endpoints with example requests.
 - Describe the testing process and how development agents should run `python adhd-focus-hub/test_tools.py`.
-- Provide a brief guide on using the development agents defined in this file and `DEV_AGENTS.md`.
+- Provide a brief guide on using the development agents defined in this file.
 
