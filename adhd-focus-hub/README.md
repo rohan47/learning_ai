@@ -102,6 +102,13 @@ The application will be available at:
 - Backend API: http://localhost:8000
 - API Documentation: http://localhost:8000/docs
 
+The default `docker-compose.yml` is optimized for local development. It mounts
+the source code into the containers and enables automatic reloads when files
+change. For a production deployment, use
+`docker-compose.production.yml` which builds the images once and runs them
+without any source-code volumes. All configuration values should be supplied via
+environment variables.
+
 ## 🏗️ Project Structure
 
 ```
@@ -296,6 +303,9 @@ See [AGENT.md](../AGENT.md) for a list of Codex development agents, how to start
 # Build and run production containers
 docker-compose -f docker-compose.production.yml up --build -d
 ```
+This compose file uses the Docker images defined in the repository and does not
+mount the application source code. Provide all secrets and URLs through
+environment variables before running the stack.
 
 ### Manual Deployment
 1. **Backend**: Deploy to Railway, Render, or similar Python hosting
