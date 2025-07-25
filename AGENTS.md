@@ -15,24 +15,6 @@ This repository uses CrewAI-based development agents located in `adhd-focus-hub/
 | **QATester** | Execute tests and report results. |
 | **DocsWriter** | Update project documentation. |
 
-## Usage
-
-Before running any agents, set your `OPENAI_API_KEY` environment variable:
-```bash
-export OPENAI_API_KEY=your_openai_api_key
-```
-
-If the `codex` command is missing, run the helper script to install it:
-```bash
-./scripts/install_codex.sh
-```
-
-Start Codex with any combination of these agents. Example:
-```bash
-codex agents start LeadPlanner BackendDeveloper FrontendDeveloper QATester DocsWriter
-```
-
-The agents are imported from the `adhd_focus_hub.dev_agents` package.
 
 ## Development Tasks
 
@@ -49,7 +31,6 @@ Below is the current development plan. Each agent should focus on the tasks in t
 - Audit API endpoints against React services and fix any mismatched routes.
 - Implement `/api/v1/organize` and `/api/v1/learn` endpoints with tests.
 - Integrate Redis via `REDIS_URL` to persist conversation history.
-- Run `python adhd-focus-hub/test_tools.py` after making changes.
 
 ### FrontendDeveloper
 - Add services and UI components for the organization and learning endpoints.
@@ -70,7 +51,6 @@ Below is the current development plan. Each agent should focus on the tasks in t
 ### QATester
 - Add tests for `/api/v1/organize` and `/api/v1/learn` endpoints.
 - Verify Redis integration by testing cached conversation history.
-- Confirm the repository includes a `LICENSE` file referenced in `README.md`.
 - Ensure CI runs the test suite on each pull request.
 
 ### IntegrationEngineer
@@ -83,6 +63,5 @@ Below is the current development plan. Each agent should focus on the tasks in t
 - Update API documentation after frontend–backend alignment.
 - Describe the organization and learning features with example requests.
 - Explain Redis setup and caching benefits.
-- Reference the MIT `LICENSE` in `README.md` and other docs.
-- Note how to run `python adhd-focus-hub/test_tools.py` as part of development.
+
 
