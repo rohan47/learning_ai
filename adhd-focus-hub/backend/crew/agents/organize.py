@@ -3,6 +3,7 @@
 from textwrap import dedent
 from typing import List, Dict, Any
 from .base import BaseADHDAgent
+from ..exceptions import LLMUnavailableError
 
 
 class OrganizationAgent(BaseADHDAgent):
@@ -98,42 +99,15 @@ RESPONSE STRUCTURE:
 Focus on creating sustainable systems that work WITH ADHD traits, not against them. Emphasize progress over perfection.
 """
         
+        if not getattr(self.agent, "llm", None):
+            raise LLMUnavailableError("LLM is not configured or unavailable")
+
         try:
             response = self.agent.llm.call(enhanced_prompt)
             return self._format_response(response)
         except Exception as e:
-            return self._handle_llm_error(prompt, str(e))
+            raise LLMUnavailableError(f"LLM call failed: {e}") from e
 
-    def _handle_llm_error(self, prompt: str, error: str) -> str:
-        """Handle LLM errors with helpful fallback for organization requests."""
-        return f"""🏠 **ADHD-Friendly Organization Support**
-
-I'm here to help create organization systems that work with your ADHD brain! Here's immediate guidance:
-
-**ADHD Organization Golden Rules:**
-• **Make it VISIBLE** - Open storage beats closed storage
-• **Keep it SIMPLE** - 3 categories maximum for any system  
-• **Make it REWARDING** - Celebrate every small organizing win
-• **Build in FLEXIBILITY** - Plans for when chaos happens
-
-**Quick Start Formula:**
-1. **Choose ONE small area** (drawer, shelf, corner of desk)
-2. **Sort into 3 piles**: Keep, Toss, Decide Later
-3. **Give everything a "home"** where it's easy to see and reach
-
-**Maintenance Made Easy:**
-• Daily: 2-minute pickup (set a timer!)
-• Weekly: 10-minute reset
-• Monthly: system tweaks only
-
-**When It All Falls Apart** (because it will):
-→ No shame, just restart small
-→ Ask: "What part actually worked?"
-→ Simplify further if needed
-
-What specific area or organization challenge would you like help with? I can create a custom system that works with your ADHD brain!
-
-*Technical note: {error}*"""
     
     def _assess_system_difficulty(self, area: str, challenges: List[str]) -> str:
         """Assess the difficulty level of organizing this area."""

@@ -3,6 +3,7 @@
 from textwrap import dedent
 from typing import List, Dict, Any
 from .base import BaseADHDAgent
+from ..exceptions import LLMUnavailableError
 
 
 class LearningAgent(BaseADHDAgent):
@@ -100,44 +101,15 @@ RESPONSE STRUCTURE:
 Focus on leveraging ADHD learning strengths (pattern recognition, creativity, hyperfocus) while accommodating challenges (attention variability, executive function).
 """
         
+        if not getattr(self.agent, "llm", None):
+            raise LLMUnavailableError("LLM is not configured or unavailable")
+
         try:
             response = self.agent.llm.call(enhanced_prompt)
             return self._format_response(response)
         except Exception as e:
-            return self._handle_llm_error(prompt, str(e))
+            raise LLMUnavailableError(f"LLM call failed: {e}") from e
 
-    def _handle_llm_error(self, prompt: str, error: str) -> str:
-        """Handle LLM errors with helpful fallback for learning requests."""
-        return f"""� **ADHD-Optimized Learning Support**
-
-I'm here to help you learn in ways that work WITH your ADHD brain! Here's immediate guidance:
-
-**ADHD Learning Superpowers to Leverage:**
-• **Pattern Recognition** - You see connections others miss
-• **Hyperfocus Ability** - Deep dives when interested
-• **Creative Thinking** - Unique approaches to problems
-• **Multi-sensory Processing** - Learn through multiple channels
-
-**Quick Learning Strategy Formula:**
-1. **Find Your Hook** - What's personally interesting about this?
-2. **Choose Your Mix** - Visual + Audio + Hands-on (pick 2-3)
-3. **Time It Right** - 15-min bursts or hyperfocus sessions
-4. **Move & Learn** - Walking, fidgeting, or standing while studying
-
-**ADHD-Friendly Study Sessions:**
-• **Low Energy**: 15-minute review sessions
-• **Medium Energy**: 25-minute Pomodoro sessions  
-• **High Energy**: 45-90 minute deep dives (when hyperfocused)
-
-**Retention Boosters:**
-• Teach it back (even to pets!)
-• Create wild, memorable stories
-• Use spaced repetition apps
-• Connect to personal interests
-
-What specific learning challenge can I help you tackle? I can suggest personalized strategies based on your ADHD learning style!
-
-*Technical note: {error}*"""
     
     def _assess_subject_engagement(self, subject: str) -> str:
         """Assess potential engagement level for the subject."""
