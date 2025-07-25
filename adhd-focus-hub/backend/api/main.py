@@ -102,11 +102,15 @@ from .routes.auth import router as auth_router
 from .routes.chat import router as chat_router
 from .routes.mood import router as mood_router
 from .routes.tasks import router as tasks_router
+from .routes.organize import router as organize_router
+from .routes.learning import router as learning_router
 
 app.include_router(auth_router)
 app.include_router(chat_router)
 app.include_router(tasks_router)
 app.include_router(mood_router)
+app.include_router(organize_router)
+app.include_router(learning_router)
 
 
 @app.exception_handler(HTTPException)

@@ -5,7 +5,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 os.environ["DATABASE_URL"] = "sqlite+aiosqlite:////tmp/test.db"
 
-from backend.api.main import app, get_db
+from backend.api.main import app, get_db, get_crew
 # Import database objects using the same module path as the application.
 # The app imports `database.models`, so we need to use the same package to
 # ensure the SQLAlchemy Base instance is shared during testing.
@@ -98,4 +98,61 @@ def test_invalid_token():
             headers={"Authorization": "Bearer invalid"},
         )
         assert resp.status_code == 401
+
+
+class DummyOrganizeAgent:
+    def create_organization_system(self, area, challenges, context=None):
+        return {
+            "response": f"Organize {area}",
+            "maintenance_frequency": {"daily": "5min tidy"},
+            "visual_elements": ["labels"],
+        }
+
+
+class DummyLearningAgent:
+    def create_learning_plan(self, subject, goals, context=None):
+        return {
+            "response": f"Learn {subject}",
+            "optimal_study_sessions": {"recommended": "standard"},
+            "retention_strategies": [],
+            "motivation_hooks": ["hook"],
+        }
+
+
+class DummyCrew:
+    def __init__(self):
+        self.agents = {
+            "organize": DummyOrganizeAgent(),
+            "learning": DummyLearningAgent(),
+        }
+
+
+@pytest.fixture
+def override_crew():
+    crew = DummyCrew()
+    app.dependency_overrides[get_crew] = lambda: crew
+    yield
+    app.dependency_overrides.pop(get_crew, None)
+
+
+def test_organize_and_learn_endpoints(override_crew):
+    with TestClient(app) as client:
+        resp = client.post(
+            "/api/v1/organize",
+            json={"area": "desk", "challenges": ["clutter"], "available_time": 15},
+        )
+        assert resp.status_code == 200
+        data = resp.json()
+        assert "system_overview" in data
+        assert "maintenance_schedule" in data
+        assert "visual_aids" in data
+
+        resp = client.post(
+            "/api/v1/learn",
+            json={"subject": "math", "learning_goals": ["algebra"]},
+        )
+        assert resp.status_code == 200
+        data = resp.json()
+        assert "learning_plan" in data
+        assert "retention_methods" in data
 
