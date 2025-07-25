@@ -39,6 +39,18 @@ export interface MoodCheckRequest {
   triggers?: string[];
 }
 
+export interface OrganizationRequest {
+  space_description: string;
+  goal: string;
+}
+
+export interface LearningRequest {
+  topic: string;
+  current_struggles?: string;
+  learning_style?: string;
+  time_available?: number;
+}
+
 export interface Token {
   access_token: string;
   token_type: string;

@@ -7,6 +7,8 @@ export { default as TaskService } from './taskService';
 export { default as FocusService } from './focusService';
 export { default as MoodService } from './moodService';
 export { default as AuthService } from './authService';
+export { default as OrganizationService } from './organizationService';
+export { default as LearningService } from './learningService';
 
 // Re-export types for convenience
 export * from './types';

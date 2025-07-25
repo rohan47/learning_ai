@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ChatService } from '../services';
+import { LearningService } from '../services';
 import { BookOpen, Brain, Target, Zap } from 'lucide-react';
 
 const Learning: React.FC = () => {
@@ -15,15 +15,11 @@ const Learning: React.FC = () => {
 
     setIsLoading(true);
     try {
-      const learningResponse = await ChatService.sendMessage({
-        message: `Help me learn: ${learningTopic}. Current struggles: ${currentStruggles || 'None specified'}. I have ${timeAvailable} minutes available.`,
-        context: {
-          agent_preference: 'learning',
-          request_type: 'learning_strategy',
-          learning_style: learningStyle,
-          time_available: timeAvailable,
-          struggles: currentStruggles
-        }
+      const learningResponse = await LearningService.getLearningPlan({
+        topic: learningTopic,
+        current_struggles: currentStruggles,
+        learning_style: learningStyle,
+        time_available: timeAvailable
       });
 
       setResponse(learningResponse);
