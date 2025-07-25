@@ -17,7 +17,7 @@ ADHD Focus Hub is a comprehensive platform designed specifically for individuals
 ### 🤖 Multi-Agent AI System
 - Intelligent routing to appropriate specialists
 - Context-aware responses based on user state
-- Conversation history and learning
+- Conversation history and learning (trimmed to a configurable limit)
 - ADHD-specific understanding and support
 
 ### 🎯 Focus Management
@@ -153,6 +153,8 @@ ENVIRONMENT=development
 
 # Frontend
 REACT_APP_API_URL=http://localhost:8000
+# Max conversation history to keep
+CREW_MAX_HISTORY=50
 ```
 
 ## 🤖 AI Agents
