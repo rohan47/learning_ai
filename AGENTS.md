@@ -39,49 +39,50 @@ The agents are imported from the `adhd_focus_hub.dev_agents` package.
 Below is the current development plan. Each agent should focus on the tasks in their section.
 
 ### LeadPlanner
-- Turn the "Next Steps" section in `PROJECT_STATUS.md` into sequential milestones: environment setup, CrewAI tool fixes, database layer, authentication, frontend integration, comprehensive testing, and deployment.
-- Break each milestone into discrete tasks with clear deliverables and success criteria.
-- Provide time estimates and priority ordering for the remaining work.
-- Assess integration gaps between the backend and React frontend.
-- Document tasks for BackendArchitect and FrontendArchitect to address the gaps.
+- Keep `ROADMAP.md` up to date and break milestones 1&ndash;6 into actionable tasks.
+- Provide time estimates, dependencies, and priority ordering for the remaining work.
+- Assess integration gaps between backend and frontend services.
+- Document follow-up items for BackendArchitect and FrontendArchitect to close those gaps.
 
 ### BackendDeveloper
-- Create `backend/.env.example` with `OPENAI_API_KEY`, `DATABASE_URL`, `REDIS_URL`, and `SECRET_KEY`.
-- Ensure `load_dotenv()` in `backend/api/main.py` loads a local `.env` file.
-- Review `backend/crew/tools/` for Pydantic v2 compliance and update models if necessary.
-- Implement SQLAlchemy models (User, Task, MoodLog) with Alembic migrations and connect to PostgreSQL via `DATABASE_URL`.
-- Add JWT-based authentication and protect API routes with `HTTPBearer`.
-- Create CRUD endpoints for tasks and mood logs.
+- Create Docker compose files and scripts for backend deployment.
+- Audit API endpoints against React services and fix any mismatched routes.
+- Implement `/api/v1/organize` and `/api/v1/learn` endpoints with tests.
+- Integrate Redis via `REDIS_URL` to persist conversation history.
 - Run `python adhd-focus-hub/test_tools.py` after making changes.
 
 ### FrontendDeveloper
-- Add login and registration pages that store JWT tokens securely.
-- Update service files in `frontend/src/services/` to call the new authentication and CRUD endpoints with the token.
-- Connect existing pages so they fetch and save real data from the backend.
-- Provide graceful error handling for authentication failures or network issues.
+- Add services and UI components for the organization and learning endpoints.
+- Display Redis-backed conversation history in the UI.
+- Collaborate on the CI/CD pipeline so the React build deploys automatically.
+- Handle errors from new endpoints and general network issues.
 
 ### BackendArchitect
-- Review database schemas and API design for scalability.
-- Propose deployment architecture and security best practices.
-- Resolve API route mismatches with the frontend and publish a clear contract.
+- Design Docker-based deployment architecture for backend and frontend services.
+- Publish the updated API contract during frontend–backend alignment.
+- Plan Redis caching strategy and database migrations for conversation history.
 
 ### FrontendArchitect
-- Define the component hierarchy and shared state patterns.
-- Establish accessibility and performance standards for UI.
-- Review service APIs against backend routes and update types or paths to match.
+- Outline component patterns for organization and learning features.
+- Ensure accessibility and performance standards for the updated UI.
+- Coordinate with BackendArchitect to finalize API paths and types.
 
 ### QATester
-- Expand `adhd-focus-hub/test_tools.py` into a pytest suite covering planning tools and all API endpoints (authentication, tasks, mood logs).
-- Write tests for token validation, database CRUD operations, and error conditions.
-- Document how to run the tests and ensure the results are shared in pull requests.
+- Add tests for `/api/v1/organize` and `/api/v1/learn` endpoints.
+- Verify Redis integration by testing cached conversation history.
+- Confirm the repository includes a `LICENSE` file referenced in `README.md`.
+- Ensure CI runs the test suite on each pull request.
 
 ### IntegrationEngineer
-- Maintain CI/CD pipelines and ensure backend and frontend build correctly.
+- Build GitHub Actions for linting, tests, and Docker image creation.
+- Configure automatic deployment to a staging environment.
 - Coordinate environment variables and Docker configuration across services.
 
 ### DocsWriter
-- Update `README.md` with setup instructions for `.env.example`, database initialization, and running backend and frontend services.
-- Document new authentication routes and CRUD endpoints with example requests.
-- Describe the testing process and how development agents should run `python adhd-focus-hub/test_tools.py`.
-- Provide a brief guide on using the development agents defined in this file and `DEV_AGENTS.md`.
+- Document Docker deployment steps and container registry usage.
+- Update API documentation after frontend–backend alignment.
+- Describe the organization and learning features with example requests.
+- Explain Redis setup and caching benefits.
+- Reference the MIT `LICENSE` in `README.md` and other docs.
+- Note how to run `python adhd-focus-hub/test_tools.py` as part of development.
 
