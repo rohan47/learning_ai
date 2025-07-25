@@ -1,8 +1,4 @@
-# Development Agents for Codex
-
-This repository uses CrewAI-based development agents located in `adhd-focus-hub/dev_agents/`. They streamline planning, implementation, and testing when working with Codex.
-
-## Agents
+# AGENTS.md
 
 | Agent | Role |
 |-------|------|
@@ -51,7 +47,6 @@ Below is the current development plan. Each agent should focus on the tasks in t
 ### QATester
 - Add tests for `/api/v1/organize` and `/api/v1/learn` endpoints.
 - Verify Redis integration by testing cached conversation history.
-- Ensure CI runs the test suite on each pull request.
 
 ### IntegrationEngineer
 - Build GitHub Actions for linting, tests, and Docker image creation.
