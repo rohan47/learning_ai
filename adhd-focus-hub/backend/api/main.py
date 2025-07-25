@@ -12,14 +12,18 @@ from fastapi.encoders import jsonable_encoder
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 
+import backend.database.models  # ensure models are registered
 from api.models import ErrorResponse, HealthResponse
 from backend.database import get_db
-import backend.database.models  # ensure models are registered
+from config.settings import get_settings
 from crew.crew import ADHDFocusHubCrew
 
 # Load environment variables from backend/.env if present
 env_path = Path(__file__).resolve().parent.parent / ".env"
 load_dotenv(env_path)
+
+# Load application settings
+settings = get_settings()
 
 # Add the parent directory to the path to resolve imports
 sys.path.append(str(Path(__file__).parent.parent))
@@ -96,8 +100,8 @@ async def health_check():
 
 from .routes.auth import router as auth_router
 from .routes.chat import router as chat_router
-from .routes.tasks import router as tasks_router
 from .routes.mood import router as mood_router
+from .routes.tasks import router as tasks_router
 
 app.include_router(auth_router)
 app.include_router(chat_router)
