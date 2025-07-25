@@ -10,6 +10,7 @@ import Learning from './pages/Learning';
 import Organization from './pages/Organization';
 import Login from './pages/Login';
 import Register from './pages/Register';
+import ChatPage from './pages/Chat';
 import AIChat from './components/AIChat';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import './App.css';
@@ -108,6 +109,14 @@ function App() {
                   element={
                     <RequireAuth>
                       <Organization />
+                    </RequireAuth>
+                  }
+                />
+                <Route
+                  path="/chat"
+                  element={
+                    <RequireAuth>
+                      <ChatPage />
                     </RequireAuth>
                   }
                 />

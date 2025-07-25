@@ -7,7 +7,8 @@ import {
   Heart, 
   BookOpen, 
   Folder,
-  X 
+  MessageCircle,
+  X
 } from 'lucide-react';
 
 interface SidebarProps {
@@ -25,6 +26,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
     { path: '/mood', icon: Heart, label: 'Mood Tracking' },
     { path: '/learning', icon: BookOpen, label: 'Learning Hub' },
     { path: '/organization', icon: Folder, label: 'Organization' },
+    { path: '/chat', icon: MessageCircle, label: 'Chat Assistant' },
   ];
 
   return (
