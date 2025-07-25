@@ -37,6 +37,8 @@ Below is the current development plan. Each agent should focus on the tasks in t
 - Turn the "Next Steps" section in `PROJECT_STATUS.md` into sequential milestones: environment setup, CrewAI tool fixes, database layer, authentication, frontend integration, comprehensive testing, and deployment.
 - Break each milestone into discrete tasks with clear deliverables and success criteria.
 - Provide time estimates and priority ordering for the remaining work.
+- Assess integration gaps between the backend and React frontend.
+- Document tasks for BackendArchitect and FrontendArchitect to address the gaps.
 
 ### BackendDeveloper
 - Create `backend/.env.example` with `OPENAI_API_KEY`, `DATABASE_URL`, `REDIS_URL`, and `SECRET_KEY`.
@@ -56,10 +58,12 @@ Below is the current development plan. Each agent should focus on the tasks in t
 ### BackendArchitect
 - Review database schemas and API design for scalability.
 - Propose deployment architecture and security best practices.
+- Resolve API route mismatches with the frontend and publish a clear contract.
 
 ### FrontendArchitect
 - Define the component hierarchy and shared state patterns.
 - Establish accessibility and performance standards for UI.
+- Review service APIs against backend routes and update types or paths to match.
 
 ### QATester
 - Expand `adhd-focus-hub/test_tools.py` into a pytest suite covering planning tools and all API endpoints (authentication, tasks, mood logs).
