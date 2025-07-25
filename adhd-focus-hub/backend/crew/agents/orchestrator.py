@@ -4,6 +4,7 @@ from typing import Dict, Any, List
 from datetime import datetime
 from crewai import LLM
 
+from ..exceptions import LLMUnavailableError
 from .base import BaseADHDAgent
 
 
@@ -58,6 +59,8 @@ class OrchestratorAgent(BaseADHDAgent):
 
             return result
             
+        except LLMUnavailableError:
+            raise
         except Exception as e:
             return {
                 "response": "I'm having trouble coordinating with my specialist team right now. Let me provide basic guidance based on your request.",
@@ -144,48 +147,15 @@ RESPONSE STRUCTURE:
 Focus on creating a cohesive support experience that doesn't overwhelm while addressing their immediate needs comprehensively.
 """
         
+        if not getattr(self.agent, "llm", None):
+            raise LLMUnavailableError("LLM is not configured or unavailable")
+
         try:
             response = self.agent.llm.call(enhanced_prompt)
             return self._format_response(response)
         except Exception as e:
-            return self._handle_llm_error(prompt, str(e))
+            raise LLMUnavailableError(f"LLM call failed: {e}") from e
 
-    def _handle_llm_error(self, prompt: str, error: str) -> str:
-        """Handle LLM errors with helpful fallback for orchestrator requests."""
-        return f"""🧠 **ADHD Support Coordination**
-
-I'm here to help coordinate comprehensive ADHD support for you! Even while I work on providing detailed guidance, here's immediate support:
-
-**🎯 Immediate ADHD Support Framework:**
-
-**FOR OVERWHELM:**
-• Pick ONE small thing to focus on right now
-• Take 3 deep breaths and validate that this is hard
-• Remember: you don't have to solve everything today
-
-**FOR TASK MANAGEMENT:**
-• Break it into 15-minute chunks
-• Start with the easiest or most interesting part
-• Set a timer and give yourself permission to stop when it rings
-
-**FOR EMOTIONAL REGULATION:**
-• Name what you're feeling without judgment
-• Move your body (walk, stretch, fidget)
-• Remind yourself that ADHD brains work differently, not worse
-
-**FOR FOCUS CHALLENGES:**
-• Change your environment or body position
-• Use background noise or music if it helps
-• Try the 2-minute rule: just 2 minutes of the task
-
-**FOR ORGANIZATION:**
-• Start with clearing one small surface
-• Use visible storage over hidden storage
-• "Good enough" is better than perfect
-
-I can provide more specific guidance once you tell me what area you'd most like support with right now. You're doing great by reaching out for help!
-
-*Technical note: {error}*"""
     
     def _format_orchestrator_response(self, response: str, agent_insights: Dict[str, str] = None) -> str:
         """Format the orchestrator response with insights summary."""

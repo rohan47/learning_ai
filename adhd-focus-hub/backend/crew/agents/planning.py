@@ -3,6 +3,7 @@
 from textwrap import dedent
 from typing import List, Dict, Any
 from .base import BaseADHDAgent
+from ..exceptions import LLMUnavailableError
 from ..tools.planning_tools import (
     TimeEstimationTool,
     TaskBreakdownTool,
@@ -103,37 +104,15 @@ RESPONSE STRUCTURE:
 Focus on being practical, compassionate, and understanding of ADHD challenges while providing concrete, actionable guidance.
 """
         
+        if not getattr(self.agent, "llm", None):
+            raise LLMUnavailableError("LLM is not configured or unavailable")
+
         try:
             response = self.agent.llm.call(enhanced_prompt)
             return self._format_response(response)
         except Exception as e:
-            return self._handle_llm_error(prompt, str(e))
+            raise LLMUnavailableError(f"LLM call failed: {e}") from e
 
-    def _handle_llm_error(self, prompt: str, error: str) -> str:
-        """Handle LLM errors with helpful fallback for planning requests."""
-        return f"""🎯 **ADHD Planning Support** 
-
-I'm here to help with task planning! While I work on getting you a more detailed response, here's immediate support:
-
-**For Task Breakdown:**
-• Split large tasks into 15-25 minute chunks
-• Add buffer time (ADHD tax) - usually 25-50% more
-• Start with the most interesting or easiest part
-• Plan rewards after each chunk
-
-**For Time Estimation:**
-• Double your initial estimate (time blindness is real!)
-• Include prep time, actual work time, and wrap-up
-• Consider your energy levels throughout the day
-
-**For Prioritization:**
-• Match high-energy times with complex tasks
-• Use dopamine potential as a factor
-• Consider deadlines but not at the expense of overwhelm
-
-What specific planning challenge can I help you with? I can break down tasks, estimate time realistically, or help prioritize based on your ADHD brain!
-
-*Technical note: {error}*"""
     
     def _handle_time_estimation_request(self, prompt: str) -> str:
         """Handle time estimation requests using the TimeEstimationTool."""

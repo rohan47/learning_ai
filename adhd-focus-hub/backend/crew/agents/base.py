@@ -6,6 +6,8 @@ from typing import Dict, Any, List, Optional
 import json
 from datetime import datetime
 
+from ..exceptions import LLMUnavailableError
+
 
 class BaseADHDAgent:
     """Base class for all ADHD support agents with common functionality."""
@@ -129,16 +131,14 @@ class BaseADHDAgent:
     
     def _process_request(self, prompt: str) -> str:
         """Process the request using the LLM with agent-specific context."""
+        if not getattr(self.agent, "llm", None):
+            raise LLMUnavailableError("LLM is not configured or unavailable")
+
         try:
-            # Use the LLM to generate a contextual response
-            if hasattr(self.agent, 'llm') and self.agent.llm:
-                response = self.agent.llm.call(prompt)
-                return self._format_response(response)
-            else:
-                # Fallback if LLM not available
-                return self._generate_fallback_response(prompt)
+            response = self.agent.llm.call(prompt)
+            return self._format_response(response)
         except Exception as e:
-            return f"I'm having trouble processing your request right now. Could you try rephrasing it? (Error: {str(e)})"
+            raise LLMUnavailableError(f"LLM call failed: {e}") from e
     
     def _format_response(self, raw_response: str) -> str:
         """Format the LLM response with ADHD-friendly structure."""
@@ -152,9 +152,6 @@ class BaseADHDAgent:
         
         return raw_response
     
-    def _generate_fallback_response(self, prompt: str) -> str:
-        """Generate a fallback response when LLM is not available."""
-        return f"I'm processing your request about: {prompt[:100]}... Let me help you with that!"
     
     def _calculate_confidence(self) -> float:
         """Calculate confidence score for the response."""
