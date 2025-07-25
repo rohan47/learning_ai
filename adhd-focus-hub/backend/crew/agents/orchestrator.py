@@ -4,19 +4,24 @@ from typing import Dict, Any, List
 from datetime import datetime
 from crewai import LLM
 
+from .base import BaseADHDAgent
 
-class OrchestratorAgent:
+
+class OrchestratorAgent(BaseADHDAgent):
     """Main orchestrator agent that consults with all specialized ADHD agents."""
-    
+
     def __init__(self, llm: LLM):
         """Initialize the orchestrator agent."""
+        super().__init__(
+            role="ADHD Support Orchestrator",
+            goal="Coordinate multiple ADHD specialists to provide comprehensive support",
+            backstory="""You are the main ADHD support coordinator who works with a team of specialized agents.
+        Your role is to understand user needs, consult with the appropriate specialists, and synthesize their insights
+        into comprehensive, actionable advice. You have access to planning, focus, emotional support, organization,
+        and learning specialists.""",
+            llm=llm,
+        )
         self.llm = llm
-        self.role = "ADHD Support Orchestrator"
-        self.goal = "Coordinate multiple ADHD specialists to provide comprehensive support"
-        self.backstory = """You are the main ADHD support coordinator who works with a team of specialized agents. 
-        Your role is to understand user needs, consult with the appropriate specialists, and synthesize their insights 
-        into comprehensive, actionable advice. You have access to planning, focus, emotional support, organization, 
-        and learning specialists."""
     
     def orchestrate_response(
         self, 
@@ -28,23 +33,28 @@ class OrchestratorAgent:
         
         # Build the orchestrator prompt
         orchestrator_prompt = self._build_orchestrator_prompt(user_input, context, agent_insights)
-        
+
         try:
-            # Get orchestrator response using LLM directly
-            response = self._generate_response(orchestrator_prompt)
-            
-            # Parse and structure the response
-            return {
-                "response": self._format_orchestrator_response(response, agent_insights),
-                "confidence": 0.95,
-                "suggestions": self._extract_suggestions(response),
+            result = self.execute_with_context(orchestrator_prompt, context or {})
+
+            raw_response = result["response"]
+            formatted = self._format_orchestrator_response(raw_response, agent_insights)
+
+            result.update({
+                "response": formatted,
+                "suggestions": self._extract_suggestions(raw_response),
                 "consultation_summary": self._create_consultation_summary(agent_insights),
-                "metadata": {
-                    "orchestrator_used": True,
-                    "agents_consulted": list(agent_insights.keys()) if agent_insights else [],
-                    "consultation_timestamp": datetime.utcnow().isoformat()
-                }
-            }
+            })
+
+            metadata = result.get("metadata", {})
+            metadata.update({
+                "orchestrator_used": True,
+                "agents_consulted": list(agent_insights.keys()) if agent_insights else [],
+                "consultation_timestamp": datetime.utcnow().isoformat(),
+            })
+            result["metadata"] = metadata
+
+            return result
             
         except Exception as e:
             return {
@@ -54,18 +64,10 @@ class OrchestratorAgent:
                 "error": str(e)
             }
     
-    def _generate_response(self, prompt: str) -> str:
-        """Generate response using the LLM directly."""
-        try:
-            # Use the LLM to generate a response
-            response = self.llm.invoke(prompt)
-            return str(response)
-        except Exception as e:
-            return f"I understand you need comprehensive ADHD support. Based on your request, let me provide guidance across multiple areas that may help."
     
     def _build_orchestrator_prompt(
-        self, 
-        user_input: str, 
+        self,
+        user_input: str,
         context: Dict[str, Any] = None,
         agent_insights: Dict[str, str] = None
     ) -> str:
@@ -112,6 +114,17 @@ Remember: You're helping someone with ADHD who may be overwhelmed, so be:
 """
         
         return prompt
+
+    def _process_request(self, prompt: str) -> str:
+        """Process the orchestrator prompt using the LLM."""
+        try:
+            response = self.llm.invoke(prompt)
+            return str(response)
+        except Exception:
+            return (
+                "I understand you need comprehensive ADHD support. "
+                "Based on your request, let me provide guidance across multiple areas that may help."
+            )
     
     def _format_orchestrator_response(self, response: str, agent_insights: Dict[str, str] = None) -> str:
         """Format the orchestrator response with insights summary."""
@@ -206,6 +219,3 @@ Remember: You're helping someone with ADHD who may be overwhelmed, so be:
         
         return areas
 
-    def execute_with_context(self, user_input: str, context: Dict[str, Any] = None) -> Dict[str, Any]:
-        """Execute orchestrator with context - compatibility method."""
-        return self.orchestrate_response(user_input, context)
