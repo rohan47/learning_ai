@@ -9,8 +9,8 @@ This repository uses CrewAI-based development agents located in `adhd-focus-hub/
 | **LeadPlanner** | Break down features and create a roadmap. |
 | **BackendArchitect** | Design scalable backend systems. |
 | **FrontendArchitect** | Define frontend component architecture. |
-| **BackendDeveloper** | Work on the FastAPI backend. |
-| **FrontendDeveloper** | Implement the React/TypeScript frontend. |
+| **BackendDeveloper** | Implement API endpoints, manage database models, maintain authentication logic, and write tests. |
+| **FrontendDeveloper** | Build responsive React/TypeScript UIs, handle state management, and integrate with the backend API. |
 | **IntegrationEngineer** | Manage CI/CD and service integration. |
 | **QATester** | Execute tests and report results. |
 | **DocsWriter** | Update project documentation. |
