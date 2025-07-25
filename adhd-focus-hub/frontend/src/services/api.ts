@@ -8,7 +8,7 @@ import axios, { AxiosInstance, AxiosResponse } from 'axios';
 const TOKEN_KEY = 'adhd-jwt';
 
 // API Configuration
-const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:8001';
+const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:8000';
 
 // Create axios instance with default config
 const apiClient: AxiosInstance = axios.create({

@@ -69,42 +69,43 @@ class FocusCoachAgent(BaseADHDAgent):
     def _process_request(self, prompt: str) -> str:
         """Process focus session requests with ADHD expertise."""
         
-        return """
-        Let's set up a focus session that works WITH your ADHD brain! 🧠✨
-
-        🎯 **Your Adaptive Focus Plan:**
-        - **Warm-up** (2-3 mins): Quick brain dump, set intention, eliminate distractions
-        - **Focus Block** (15-25 mins): Single-task focus with timer
-        - **Active Break** (5-10 mins): Movement, hydration, reset
-        - **Optional Round 2**: If energy allows, another focused block
-
-        ⚡ **Focus Techniques Menu:**
-        Choose what feels right today:
-        - 🎵 Focus music or brown noise
-        - 🍅 Visual timer (seeing time helps ADHD brains)
-        - 📱 Phone in another room
-        - 🎯 "One thing only" mantra
-        - 🤝 Body doubling (virtual or in-person)
-
-        🏠 **Environment Setup:**
-        - Comfortable temperature
-        - Good lighting
-        - Fidget tools available
-        - Water and snacks nearby
-        - Backup task ready (if main task feels impossible)
-
-        💪 **Motivation Boosters:**
-        - Start with the most interesting part
-        - Set a "minimum viable progress" goal
-        - Reward yourself after the session
-        - Remember: ANY progress counts!
-
-        🚨 **If Focus Breaks:**
-        - No judgment! ADHD brains work differently
-        - Gently redirect attention back
-        - Take a micro-break if needed
-        - Switch to backup task if original feels overwhelming
+        # Enhance the prompt with focus-specific guidance for the LLM
+        enhanced_prompt = f"""
+        {prompt}
+        
+        RESPONSE GUIDELINES FOR FOCUS COACHING:
+        
+        1. **Personalization**: Adapt advice to the user's current state and context
+        2. **ADHD-Specific Strategies**: 
+           - Suggest adaptive Pomodoro (15-45 min blocks)
+           - Include movement breaks and sensory considerations
+           - Offer focus technique options (not prescriptive)
+           - Address hyperfocus management if relevant
+        
+        3. **Tone & Structure**:
+           - Be encouraging and non-judgmental
+           - Use clear, scannable formatting
+           - Include practical, immediate actions
+           - Acknowledge ADHD brain differences
+        
+        4. **Essential Elements**:
+           - Warm-up suggestions (2-3 min setup)
+           - Focus block duration recommendation
+           - Break timing and activities
+           - Environment optimization tips
+           - Backup plans for when focus breaks
+        
+        5. **Avoid**:
+           - Generic productivity advice
+           - Shame or judgment language
+           - Overwhelming lists
+           - One-size-fits-all solutions
+        
+        Generate a supportive, practical focus session plan that feels doable and ADHD-friendly.
         """
+        
+        # Use the parent class method which will call the LLM
+        return super()._process_request(enhanced_prompt)
     
     def _calculate_optimal_duration(self, context: Dict[str, Any], requested_duration: int = None) -> int:
         """Calculate optimal focus duration based on current state."""

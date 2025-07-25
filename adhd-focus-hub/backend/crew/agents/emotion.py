@@ -69,48 +69,49 @@ class EmotionalSupportAgent(BaseADHDAgent):
     def _process_request(self, prompt: str) -> str:
         """Process emotional support requests with ADHD understanding."""
         
-        return """
-        I hear you, and what you're feeling makes complete sense. 💙
-
-        🤗 **First, some validation:**
-        Your ADHD brain experiences emotions differently - more intensely, for longer periods. 
-        This isn't a flaw; it's how your brain is wired. You're not "too sensitive" or "overreacting."
-
-        🧠 **What's happening in your ADHD brain:**
-        - Emotions feel bigger because of how ADHD brains process dopamine
-        - Executive dysfunction can make it harder to regulate feelings
-        - RSD (rejection sensitivity) can amplify social/performance stress
-        - Low dopamine can make everything feel harder
-
-        💪 **Gentle coping strategies:**
+        # Enhance the prompt with emotion-specific guidance for the LLM
+        enhanced_prompt = f"""
+        {prompt}
         
-        **For overwhelm:**
-        - Name 3 things you can see, 2 you can hear, 1 you can touch
-        - Take 5 slow, deep breaths
-        - Remind yourself: "This feeling will pass"
+        RESPONSE GUIDELINES FOR EMOTIONAL SUPPORT:
         
-        **For shame spirals:**
-        - "My brain works differently, and that's okay"
-        - "I'm doing my best with the energy I have"
-        - "One small step is still progress"
+        1. **Validation First**: Always acknowledge and validate ADHD emotional experiences
+        2. **ADHD-Specific Understanding**:
+           - Rejection Sensitive Dysphoria (RSD)
+           - Emotional dysregulation intensity
+           - Executive dysfunction shame spirals
+           - Dopamine and mood connections
         
-        **For motivation dips:**
-        - Lower the bar (what's the smallest possible step?)
-        - Change your environment or switch tasks
-        - Connect with your 'why' or values
-        - Seek gentle accountability or body doubling
-
-        🌟 **Remember:**
-        - Your ADHD traits include creativity, empathy, and unique perspectives
-        - Bad brain days don't define your worth
-        - Needing different strategies isn't weakness
-        - You belong exactly as you are
-
-        🔄 **Next steps:**
-        - Would gentle movement help right now?
-        - Is there one tiny thing you could do for yourself?
-        - Who in your support network could you reach out to?
+        3. **Support Structure**:
+           - Start with empathy and validation
+           - Explain the neuroscience briefly (why they feel this way)
+           - Offer practical, immediate coping strategies
+           - Provide reframing techniques
+           - End with encouragement and next steps
+        
+        4. **Tone Requirements**:
+           - Warm, non-judgmental, and understanding
+           - Use "I hear you" and "that makes sense" language
+           - Avoid toxic positivity or minimizing feelings
+           - Include gentle normalization of ADHD experiences
+        
+        5. **Practical Elements**:
+           - Immediate comfort strategies (breathing, grounding)
+           - ADHD-specific coping techniques
+           - Self-compassion reframes
+           - Energy-appropriate suggestions
+        
+        6. **Avoid**:
+           - Neurotypical advice that doesn't work for ADHD
+           - Dismissive language
+           - Overwhelming strategy lists
+           - Pressure to "fix" feelings quickly
+        
+        Provide compassionate, practical emotional support that acknowledges ADHD brain differences.
         """
+        
+        # Use the parent class method which will call the LLM
+        return super()._process_request(enhanced_prompt)
     
     def _analyze_mood_pattern(self, mood_data: Dict[str, Any]) -> Dict[str, Any]:
         """Analyze mood patterns with ADHD considerations."""

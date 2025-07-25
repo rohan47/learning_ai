@@ -30,7 +30,7 @@ class ADHDFocusHubCrew:
         """Initialize the crew with all ADHD support agents."""
         # Configure Perplexity LLM
         self.llm = LLM(
-            model=os.getenv("OPENAI_MODEL", "llama-3.1-sonar-small-128k-online"),
+            model=os.getenv("OPENAI_MODEL", "llama-3.1-sonar-small-128k-chat"),
             api_key=os.getenv("OPENAI_API_KEY"),
             base_url=os.getenv("OPENAI_BASE_URL", "https://api.perplexity.ai")
         )

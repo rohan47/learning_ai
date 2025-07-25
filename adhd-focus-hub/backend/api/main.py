@@ -12,9 +12,9 @@ from fastapi.encoders import jsonable_encoder
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 
-import backend.database.models  # ensure models are registered
+import database.models  # ensure models are registered
 from api.models import ErrorResponse, HealthResponse
-from backend.database import get_db
+from database import get_db
 from config.settings import get_settings
 from crew.crew import ADHDFocusHubCrew
 

@@ -11,7 +11,7 @@ class Settings(BaseSettings):
 
     openai_api_key: str | None = None
     openai_base_url: str = "https://api.perplexity.ai"
-    openai_model: str = "llama-3.1-sonar-small-128k-online"
+    openai_model: str = "sonar"
 
     database_url: str = "postgresql+asyncpg://postgres:postgres@localhost:5432/postgres"
     redis_url: str = "redis://localhost:6379/0"

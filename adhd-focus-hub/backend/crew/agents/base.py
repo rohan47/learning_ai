@@ -128,10 +128,33 @@ class BaseADHDAgent:
         return "\n".join(prompt_parts)
     
     def _process_request(self, prompt: str) -> str:
-        """Process the request - to be implemented by specific agents."""
-        # This would typically call the LLM with the agent's specific expertise
-        # For now, return a placeholder that would be replaced with actual LLM call
-        return f"[{self.role}] Processing: {prompt[:100]}..."
+        """Process the request using the LLM with agent-specific context."""
+        try:
+            # Use the LLM to generate a contextual response
+            if hasattr(self.agent, 'llm') and self.agent.llm:
+                response = self.agent.llm.call(prompt)
+                return self._format_response(response)
+            else:
+                # Fallback if LLM not available
+                return self._generate_fallback_response(prompt)
+        except Exception as e:
+            return f"I'm having trouble processing your request right now. Could you try rephrasing it? (Error: {str(e)})"
+    
+    def _format_response(self, raw_response: str) -> str:
+        """Format the LLM response with ADHD-friendly structure."""
+        # Ensure the response is well-structured and encouraging
+        if not raw_response.strip():
+            return "I want to help, but I need a bit more information. Could you tell me more about what you're working on?"
+        
+        # Add encouraging tone if missing
+        if not any(word in raw_response.lower() for word in ['you', 'your', 'we', 'together']):
+            raw_response = f"I'm here to help you! {raw_response}"
+        
+        return raw_response
+    
+    def _generate_fallback_response(self, prompt: str) -> str:
+        """Generate a fallback response when LLM is not available."""
+        return f"I'm processing your request about: {prompt[:100]}... Let me help you with that!"
     
     def _calculate_confidence(self) -> float:
         """Calculate confidence score for the response."""
