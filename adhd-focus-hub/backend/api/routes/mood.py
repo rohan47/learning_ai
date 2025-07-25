@@ -5,7 +5,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from api.models import MoodCheckRequest, MoodCheckResponse, MoodLogOut
 from ..main import get_db
-from backend.database.models import MoodLog, User
+from database.models import MoodLog, User
 from crew.crew import ADHDFocusHubCrew
 from ..routes.auth import get_current_user
 from ..main import get_crew

@@ -14,7 +14,7 @@ from api.models import (
     TaskOut,
 )
 from ..main import get_db
-from backend.database.models import Task, User
+from database.models import Task, User
 from crew.crew import ADHDFocusHubCrew
 from ..routes.auth import get_current_user
 from ..main import get_crew

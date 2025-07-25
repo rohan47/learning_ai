@@ -76,26 +76,64 @@ class PlanningAgent(BaseADHDAgent):
         return result
     
     def _process_request(self, prompt: str) -> str:
-        """Process planning requests with ADHD expertise using actual tools."""
+        """Process planning requests with ADHD expertise using LLM."""
         
-        # Analyze the request to determine which tools to use
-        prompt_lower = prompt.lower()
+        # Enhanced prompt for ADHD-focused planning with dynamic responses
+        enhanced_prompt = f"""
+You are Plan-It Pro, an ADHD Task Planning Specialist. 
+
+ADHD-SPECIFIC PLANNING GUIDELINES:
+• Break tasks into 15-25 minute focus chunks
+• Include "ADHD tax" - add 25-50% buffer time
+• Consider executive function challenges
+• Address time blindness with concrete time blocks
+• Provide dopamine-friendly rewards and milestones
+• Use clear, action-oriented language
+• Acknowledge that plans may need flexibility
+
+USER REQUEST: {prompt}
+
+RESPONSE STRUCTURE:
+1. **Understanding**: Briefly acknowledge the user's request
+2. **ADHD-Aware Analysis**: Consider executive function needs
+3. **Practical Plan**: Provide specific, time-blocked steps
+4. **Success Strategies**: Include ADHD-friendly tips
+5. **Flexibility Note**: Remind that plans can be adjusted
+
+Focus on being practical, compassionate, and understanding of ADHD challenges while providing concrete, actionable guidance.
+"""
         
-        # Time estimation requests
-        if any(word in prompt_lower for word in ['time', 'long', 'estimate', 'duration', 'how much time']):
-            return self._handle_time_estimation_request(prompt)
-        
-        # Task breakdown requests
-        elif any(word in prompt_lower for word in ['break down', 'breakdown', 'steps', 'divide', 'split']):
-            return self._handle_task_breakdown_request(prompt)
-        
-        # Priority assessment requests
-        elif any(word in prompt_lower for word in ['prioritize', 'priority', 'order', 'which first', 'urgent']):
-            return self._handle_priority_assessment_request(prompt)
-        
-        # General planning request - use task breakdown as default
-        else:
-            return self._handle_general_planning_request(prompt)
+        try:
+            response = self.agent.llm.call(enhanced_prompt)
+            return self._format_response(response)
+        except Exception as e:
+            return self._handle_llm_error(prompt, str(e))
+
+    def _handle_llm_error(self, prompt: str, error: str) -> str:
+        """Handle LLM errors with helpful fallback for planning requests."""
+        return f"""🎯 **ADHD Planning Support** 
+
+I'm here to help with task planning! While I work on getting you a more detailed response, here's immediate support:
+
+**For Task Breakdown:**
+• Split large tasks into 15-25 minute chunks
+• Add buffer time (ADHD tax) - usually 25-50% more
+• Start with the most interesting or easiest part
+• Plan rewards after each chunk
+
+**For Time Estimation:**
+• Double your initial estimate (time blindness is real!)
+• Include prep time, actual work time, and wrap-up
+• Consider your energy levels throughout the day
+
+**For Prioritization:**
+• Match high-energy times with complex tasks
+• Use dopamine potential as a factor
+• Consider deadlines but not at the expense of overwhelm
+
+What specific planning challenge can I help you with? I can break down tasks, estimate time realistically, or help prioritize based on your ADHD brain!
+
+*Technical note: {error}*"""
     
     def _handle_time_estimation_request(self, prompt: str) -> str:
         """Handle time estimation requests using the TimeEstimationTool."""

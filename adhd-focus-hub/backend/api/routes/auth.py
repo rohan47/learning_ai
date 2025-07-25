@@ -11,7 +11,7 @@ from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from ..main import get_db
-from backend.database.models import User
+from database.models import User
 from api.models import UserCreate, UserLogin, Token
 
 logger = logging.getLogger(__name__)

@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import Header from './components/Header';
 import Sidebar from './components/Sidebar';
+import DebugInfo from './components/DebugInfo';
+import ApiTest from './components/ApiTest';
 import Dashboard from './pages/Dashboard';
 import Tasks from './pages/Tasks';
 import Focus from './pages/Focus';
@@ -125,6 +127,8 @@ function App() {
           </div>
 
           <AIChat isOpen={chatOpen} onClose={() => setChatOpen(false)} />
+          <DebugInfo />
+          <ApiTest />
         </div>
       </AuthProvider>
     </Router>

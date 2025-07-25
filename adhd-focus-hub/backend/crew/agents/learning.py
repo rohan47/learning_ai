@@ -72,71 +72,72 @@ class LearningAgent(BaseADHDAgent):
         return result
     
     def _process_request(self, prompt: str) -> str:
-        """Process learning requests with ADHD-optimized strategies."""
+        """Process learning requests with ADHD-optimized strategies using LLM."""
         
-        return """
-        Let's create a learning approach that works WITH your ADHD brain! 🧠📚
+        # Enhanced prompt for ADHD-focused learning with dynamic responses
+        enhanced_prompt = f"""
+You are Study Smart, an ADHD Learning and Knowledge Specialist.
 
-        🎯 **ADHD Learning Superpowers:**
-        Your brain is actually designed for certain types of learning:
-        - Pattern recognition and big-picture thinking
-        - Creative connections between ideas
-        - Hyperfocus deep-dives when interested
-        - Learning through movement and hands-on experience
+ADHD LEARNING PRINCIPLES:
+• INTEREST drives attention better than obligation
+• MULTI-SENSORY approaches work better than single-mode learning
+• CHUNKED information prevents overwhelm
+• ACTIVE processing beats passive consumption
+• MOVEMENT can enhance learning for ADHD brains
+• HYPERFOCUS periods are golden learning opportunities
+• VARIETY maintains engagement when attention wanes
 
-        ⚡ **Your Optimized Learning Plan:**
+USER REQUEST: {prompt}
+
+RESPONSE STRUCTURE:
+1. **Learning Assessment**: Understand their learning challenge/goal
+2. **Interest Hook**: Find personally engaging aspects of the topic
+3. **Multi-Sensory Strategy**: Suggest 2-3 different learning modalities
+4. **ADHD-Friendly Schedule**: Recommend session lengths and timing
+5. **Retention Techniques**: Memory strategies that work with ADHD
+6. **Motivation Maintenance**: Keep engagement high over time
+
+Focus on leveraging ADHD learning strengths (pattern recognition, creativity, hyperfocus) while accommodating challenges (attention variability, executive function).
+"""
         
-        **1. Find Your Hook** 🎣
-        - What's personally interesting about this topic?
-        - How does it connect to your goals/interests?
-        - What's the most intriguing part to start with?
-        
-        **2. Multi-Sensory Learning Menu** 🌈
-        Choose 2-3 that appeal to you:
-        - 🎵 Listen: podcasts, audiobooks, music
-        - 👀 Visual: diagrams, mind maps, videos
-        - ✋ Hands-on: experiments, building, writing
-        - 🚶 Movement: walking while learning, fidget tools
-        - 💬 Social: explaining to others, study groups
-        
-        **3. ADHD-Friendly Study Sessions** ⏰
-        - **Micro-learning**: 15-minute focused bursts
-        - **Hyperfocus windows**: longer when energy is high
-        - **Active breaks**: movement between sessions
-        - **Variety**: switch methods to maintain interest
-        
-        **4. Information Processing** 🧩
-        - Start with big picture, then zoom into details
-        - Create connections to existing knowledge
-        - Use analogies and storytelling
-        - Teach back what you learned (even to a pet!)
-        
-        **5. Retention Boosters** 🚀
-        - Spaced repetition with apps or flashcards
-        - Create silly mnemonics or memory palaces
-        - Practice retrieval, not just re-reading
-        - Connect learning to emotions or personal stories
-        
-        💡 **ADHD Study Pro Tips:**
-        - Study when genuinely curious, not just when "supposed to"
-        - Change locations to reset attention
-        - Use timers to prevent hyperfocus burnout
-        - Celebrate small learning wins
-        - Have backup subjects for when main topic feels impossible
-        
-        🎵 **Environment Optimization:**
-        - Background music or white noise (if it helps)
-        - Comfortable seating that allows movement
-        - Good lighting and minimal visual distractions
-        - Fidget tools or stress balls
-        - Water and healthy snacks nearby
-        
-        🧠 **Working WITH Your ADHD Brain:**
-        - Low energy? Do review or passive learning
-        - High energy? Tackle new, complex concepts
-        - Restless? Try walking meetings or standing desk
-        - Distracted? Switch subjects or take a movement break
-        """
+        try:
+            response = self.agent.llm.call(enhanced_prompt)
+            return self._format_response(response)
+        except Exception as e:
+            return self._handle_llm_error(prompt, str(e))
+
+    def _handle_llm_error(self, prompt: str, error: str) -> str:
+        """Handle LLM errors with helpful fallback for learning requests."""
+        return f"""� **ADHD-Optimized Learning Support**
+
+I'm here to help you learn in ways that work WITH your ADHD brain! Here's immediate guidance:
+
+**ADHD Learning Superpowers to Leverage:**
+• **Pattern Recognition** - You see connections others miss
+• **Hyperfocus Ability** - Deep dives when interested
+• **Creative Thinking** - Unique approaches to problems
+• **Multi-sensory Processing** - Learn through multiple channels
+
+**Quick Learning Strategy Formula:**
+1. **Find Your Hook** - What's personally interesting about this?
+2. **Choose Your Mix** - Visual + Audio + Hands-on (pick 2-3)
+3. **Time It Right** - 15-min bursts or hyperfocus sessions
+4. **Move & Learn** - Walking, fidgeting, or standing while studying
+
+**ADHD-Friendly Study Sessions:**
+• **Low Energy**: 15-minute review sessions
+• **Medium Energy**: 25-minute Pomodoro sessions  
+• **High Energy**: 45-90 minute deep dives (when hyperfocused)
+
+**Retention Boosters:**
+• Teach it back (even to pets!)
+• Create wild, memorable stories
+• Use spaced repetition apps
+• Connect to personal interests
+
+What specific learning challenge can I help you tackle? I can suggest personalized strategies based on your ADHD learning style!
+
+*Technical note: {error}*"""
     
     def _assess_subject_engagement(self, subject: str) -> str:
         """Assess potential engagement level for the subject."""

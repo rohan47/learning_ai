@@ -70,70 +70,70 @@ class OrganizationAgent(BaseADHDAgent):
         return result
     
     def _process_request(self, prompt: str) -> str:
-        """Process organization requests with ADHD-friendly approaches."""
+        """Process organization requests with ADHD-friendly approaches using LLM."""
         
-        return """
-        Let's create an organization system that actually works for your ADHD brain! 🧠✨
+        # Enhanced prompt for ADHD-focused organization with dynamic responses
+        enhanced_prompt = f"""
+You are Tidy Tech, an ADHD Organization and Structure Specialist.
 
-        🎯 **ADHD-Friendly Organization Principles:**
+ADHD-SPECIFIC ORGANIZATION PRINCIPLES:
+• VISIBLE over hidden storage (out of sight = out of mind)
+• SIMPLE systems that can be maintained during executive dysfunction
+• "Good enough" over perfect (perfectionism paralyzes ADHD brains)
+• REWARD-BASED motivation rather than obligation
+• FLEXIBLE systems that can handle "chaos phases"
+• ONE-STEP processes whenever possible
+• Visual cues, labels, and external structure
+
+USER REQUEST: {prompt}
+
+RESPONSE STRUCTURE:
+1. **Understanding**: Acknowledge their organizational challenge
+2. **ADHD-Aware Assessment**: Consider executive function challenges
+3. **Simple System Design**: Provide 3-step maximum organization approach
+4. **Visual Strategy**: Include specific visual organization tools
+5. **Maintenance Plan**: Realistic upkeep that works with ADHD
+6. **Restart Protocol**: Plan for when the system breaks down (because it will)
+
+Focus on creating sustainable systems that work WITH ADHD traits, not against them. Emphasize progress over perfection.
+"""
         
-        **1. Make it VISIBLE** 👀
-        - Open storage > closed storage
-        - Clear containers > opaque ones
-        - Labels with pictures or colors
-        - Important items at eye level
-        
-        **2. Keep it SIMPLE** ⚡
-        - 3 categories max for any system
-        - "Good enough" beats perfect
-        - One-step processes when possible
-        - Easy to restart when it breaks down
-        
-        **3. Make it REWARDING** 🏆
-        - Immediate visual satisfaction
-        - Progress you can see
-        - Celebrate small wins
-        - Fun tools and colors
-        
-        **4. Build in FLEXIBILITY** 🌊
-        - Accommodates "chaos phases"
-        - Multiple ways to do the same thing
-        - Easy to modify without starting over
-        - Forgives imperfection
-        
-        📋 **Your Custom System:**
-        
-        **Quick Start (5 minutes):**
-        - Choose ONE small area
-        - Sort into 3 piles: Keep, Toss, Decide Later
-        - Focus only on obvious decisions
-        
-        **Build the System (15 minutes):**
-        - Group like items together
-        - Use visible storage/organization
-        - Label everything clearly
-        - Create "homes" for everything
-        
-        **Maintenance Plan:**
-        - Daily: 2-minute pickup
-        - Weekly: 10-minute reset
-        - Monthly: system tweaks
-        - "Mess happens" restart protocol
-        
-        💡 **ADHD Pro Tips:**
-        - Start when you feel motivated (ride the dopamine wave!)
-        - Use timers to prevent hyperfocus overwhelm
-        - Body double with music or videos
-        - Reward yourself for ANY progress
-        - Accept that maintenance isn't linear
-        
-        🚨 **When the System Breaks Down:**
-        (Because it will, and that's normal!)
-        - No shame, just restart
-        - Simplify further if needed
-        - Ask: what part actually worked?
-        - Modify, don't abandon completely
-        """
+        try:
+            response = self.agent.llm.call(enhanced_prompt)
+            return self._format_response(response)
+        except Exception as e:
+            return self._handle_llm_error(prompt, str(e))
+
+    def _handle_llm_error(self, prompt: str, error: str) -> str:
+        """Handle LLM errors with helpful fallback for organization requests."""
+        return f"""🏠 **ADHD-Friendly Organization Support**
+
+I'm here to help create organization systems that work with your ADHD brain! Here's immediate guidance:
+
+**ADHD Organization Golden Rules:**
+• **Make it VISIBLE** - Open storage beats closed storage
+• **Keep it SIMPLE** - 3 categories maximum for any system  
+• **Make it REWARDING** - Celebrate every small organizing win
+• **Build in FLEXIBILITY** - Plans for when chaos happens
+
+**Quick Start Formula:**
+1. **Choose ONE small area** (drawer, shelf, corner of desk)
+2. **Sort into 3 piles**: Keep, Toss, Decide Later
+3. **Give everything a "home"** where it's easy to see and reach
+
+**Maintenance Made Easy:**
+• Daily: 2-minute pickup (set a timer!)
+• Weekly: 10-minute reset
+• Monthly: system tweaks only
+
+**When It All Falls Apart** (because it will):
+→ No shame, just restart small
+→ Ask: "What part actually worked?"
+→ Simplify further if needed
+
+What specific area or organization challenge would you like help with? I can create a custom system that works with your ADHD brain!
+
+*Technical note: {error}*"""
     
     def _assess_system_difficulty(self, area: str, challenges: List[str]) -> str:
         """Assess the difficulty level of organizing this area."""
