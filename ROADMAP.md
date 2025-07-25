@@ -6,13 +6,15 @@ Each milestone is ordered by priority with an estimated time to complete.
 
 | Priority | Milestone | Key Tasks | Deliverables | Success Criteria | Est. Time | Status |
 |---------|----------|-----------|--------------|-----------------|-----------|--------|
-| 1 | **Orchestrator Alignment** | - Refactor `OrchestratorAgent` to extend `BaseADHDAgent`.<br>- Add context storage and conversation history.<br>- Update crew integration and unit tests. | Unified orchestrator with base features. | Tests confirm orchestration with stored context. | 1 day | ✅ Completed |
-| 2 | **Deployment** | - Create Docker compose for backend/frontend.<br>- Document deployment steps.<br>- Push images to container registry. | Dockerfiles and compose config for production. | Application deploys successfully on staging environment. | 1.5 days | ⏳ Pending |
-| 3 | **Frontend-Backend Alignment** | - Audit API endpoints and React services.<br>- Resolve route mismatches such as mood logging.<br>- Document the final API contract. | Unified interface between layers. | Frontend calls all endpoints without errors. | 0.5 day | ⏳ Pending |
-
+| 1 | **Deployment** | - Create Docker compose for backend/frontend.<br>- Document deployment steps.<br>- Push images to container registry. | Dockerfiles and compose config for production. | Application deploys successfully on staging environment. | 1.5 days | ⏳ Pending |
+| 2 | **Frontend-Backend Alignment** | - Audit API endpoints and React services.<br>- Resolve route mismatches such as mood logging.<br>- Document the final API contract. | Unified interface between layers. | Frontend calls all endpoints without errors. | 0.5 day | ⏳ Pending |
+| 3 | **Organization & Learning Endpoints** | - Implement `/api/v1/organize` and `/api/v1/learn` routes.<br>- Add services in React.<br>- Write tests for endpoints. | Endpoints with frontend services. | Users access organization and learning help via UI. | 1 day | ⏳ Pending |
+| 4 | **Redis Integration** | - Connect to Redis via `REDIS_URL`.<br>- Persist conversation history.<br>- Document caching setup. | Redis-backed caching layer. | History survives restarts. | 1 day | ⏳ Pending |
+| 5 | **CI/CD Pipeline** | - Add GitHub Actions for tests and linting.<br>- Build Docker images on push.<br>- Deploy to staging automatically. | Automated CI workflow. | Tests run on each PR and images build. | 1 day | ⏳ Pending |
+| 6 | **License File** | - Add MIT LICENSE file and reference in README. | LICENSE file. | Repository explicitly licensed. | 0.1 day | ⏳ Pending |
 ## Timeline Overview
 
-Milestones 1–6 are complete. Orchestrator alignment, deployment, and frontend-backend alignment remain, totaling approximately **3.0 days** of work. Adjust as necessary based on team availability.
+Milestones 1-7 are complete. Remaining work covers deployment, frontend-backend alignment, organization and learning endpoints, Redis integration, CI/CD pipeline, and license setup, totaling approximately **5.1 days** of work. Adjust as necessary based on team availability.
 
 ## Usage by Agents
 
@@ -37,6 +39,7 @@ This roadmap should keep all agents aligned as the project progresses.
 | 5 | **Frontend Integration** | - Update services in `frontend/src/services` to call backend APIs with auth tokens.<br>- Build login and registration pages.<br>- Connect task and mood pages to backend. | Working frontend communicating with backend. | Users can authenticate and CRUD data from UI. | 2 days | ✅ Completed |
 | 6 | **Comprehensive Testing** | - Expand `test_tools.py` into pytest suite.<br>- Cover all API endpoints and auth flow.<br>- Add CI instructions. | Pytest tests under `tests/` directory. | Test suite passes locally and in CI. | 1.5 days | ✅ Completed |
 
+| 7 | **Orchestrator Alignment** | - Refactor `OrchestratorAgent` to extend `BaseADHDAgent`.<br>- Add context storage and conversation history.<br>- Update crew integration and unit tests. | Unified orchestrator with base features. | Tests confirm orchestration with stored context. | 1 day | ✅ Completed |
 ## Known Issues
 
 - **Database module imports**: The application imports `database` while tests imported `backend.database`, creating two separate SQLAlchemy `Base` instances. This caused tables to be missing during tests. Tests were updated to import from `database`, but backend modules should standardize on a single package path.
