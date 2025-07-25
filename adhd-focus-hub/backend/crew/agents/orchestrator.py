@@ -24,8 +24,8 @@ class OrchestratorAgent(BaseADHDAgent):
         self.llm = llm
     
     def orchestrate_response(
-        self, 
-        user_input: str, 
+        self,
+        user_input: str,
         context: Dict[str, Any] = None,
         agent_insights: Dict[str, str] = None
     ) -> Dict[str, Any]:
@@ -40,9 +40,11 @@ class OrchestratorAgent(BaseADHDAgent):
             raw_response = result["response"]
             formatted = self._format_orchestrator_response(raw_response, agent_insights)
 
+            questions = self._generate_clarifying_questions(context)
             result.update({
                 "response": formatted,
-                "suggestions": self._extract_suggestions(raw_response),
+                "suggestions": self._extract_suggestions(raw_response, context),
+                "clarifying_questions": questions,
                 "consultation_summary": self._create_consultation_summary(agent_insights),
             })
 
@@ -159,7 +161,7 @@ Remember: You're helping someone with ADHD who may be overwhelmed, so be:
         
         return formatted_response
     
-    def _extract_suggestions(self, response: str) -> List[str]:
+    def _extract_suggestions(self, response: str, context: Dict[str, Any] = None) -> List[str]:
         """Extract actionable suggestions from the response."""
         
         suggestions = [
@@ -177,7 +179,12 @@ Remember: You're helping someone with ADHD who may be overwhelmed, so be:
         if "break" in response.lower() or "chunk" in response.lower():
             suggestions.insert(0, "Break large tasks into smaller, manageable pieces")
         
-        return suggestions[:4]  # Limit to 4 suggestions
+        clarifying = self._generate_clarifying_questions(context)
+        suggestions.extend(clarifying)
+
+        # Limit length but ensure clarifying questions are included
+        max_len = max(4, len(suggestions))
+        return suggestions[:max_len]
     
     def _create_consultation_summary(self, agent_insights: Dict[str, str] = None) -> Dict[str, Any]:
         """Create a summary of the consultation process."""
@@ -216,6 +223,25 @@ Remember: You're helping someone with ADHD who may be overwhelmed, so be:
         for agent_name in agent_insights.keys():
             if agent_name in agent_mapping:
                 areas.append(agent_mapping[agent_name])
-        
+
         return areas
+
+    def _generate_clarifying_questions(self, context: Dict[str, Any] = None) -> List[str]:
+        """Generate clarifying questions based on missing context."""
+
+        context = context or {}
+        questions = []
+
+        if not context.get("daily_routine"):
+            questions.append("What does a typical day look like for you?")
+        if not context.get("challenges"):
+            questions.append("Which ADHD-related challenges do you struggle with most?")
+        if not context.get("strengths"):
+            questions.append("Are there strategies that already work well for you?")
+        if not context.get("preferences"):
+            questions.append("Do you prefer any specific tools or apps to stay organized?")
+        if not context.get("existing_strategies"):
+            questions.append("What approaches have you tried before to manage your ADHD?")
+
+        return questions
 
