@@ -85,11 +85,3 @@ Below is the current development plan. Each agent should focus on the tasks in t
 - Describe the testing process and how development agents should run `python adhd-focus-hub/test_tools.py`.
 - Provide a brief guide on using the development agents defined in this file and `DEV_AGENTS.md`.
 
-## Testing
-
-After code changes, run:
-```bash
-python adhd-focus-hub/test_tools.py
-```
-Include the output of this script in your pull request summary.
-
