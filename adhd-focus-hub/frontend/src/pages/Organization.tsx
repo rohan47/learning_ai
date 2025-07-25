@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ChatService } from '../services';
+import { OrganizationService } from '../services';
 import { Folder, CheckSquare, FileText, Lightbulb } from 'lucide-react';
 
 interface OrganizationTip {
@@ -19,12 +19,9 @@ const Organization: React.FC = () => {
 
     setIsLoading(true);
     try {
-      const organizationResponse = await ChatService.sendMessage({
-        message: `Help me organize my space: ${spaceDescription}. My goal is: ${organizationGoal}`,
-        context: {
-          agent_preference: 'organize',
-          request_type: 'organization_help'
-        }
+      const organizationResponse = await OrganizationService.getOrganizationPlan({
+        space_description: spaceDescription,
+        goal: organizationGoal
       });
 
       setResponse(organizationResponse);
