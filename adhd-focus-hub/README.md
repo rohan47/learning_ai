@@ -306,11 +306,6 @@ cd frontend
 npm run lint
 ```
 
-## Development Agents
-
-See [AGENT.md](../AGENT.md) for a list of Codex development agents, how to start them, and example workflows.
-If the `codex` CLI isn't installed, execute `./scripts/install_codex.sh` from the repository root.
-
 ## 🚀 Deployment
 
 ### Docker Production
@@ -328,17 +323,6 @@ environment variables before running the stack.
 3. **Database**: Use managed PostgreSQL (AWS RDS, Digital Ocean, etc.)
 4. **Redis**: Use managed Redis service
 
-## 🤝 Contributing
-
-We welcome contributions! Please see our contributing guidelines for:
-- Code style and standards
-- ADHD-aware UX principles
-- Accessibility requirements
-- Testing procedures
-
-## 📄 License
-
-License information to be determined.
 
 ## 🙏 Acknowledgments
 

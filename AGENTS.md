@@ -1,8 +1,4 @@
-# Development Agents for Codex
-
-This repository uses CrewAI-based development agents located in `adhd-focus-hub/dev_agents/`. They streamline planning, implementation, and testing when working with Codex.
-
-## Agents
+# AGENTS.md
 
 | Agent | Role |
 |-------|------|
@@ -14,25 +10,6 @@ This repository uses CrewAI-based development agents located in `adhd-focus-hub/
 | **IntegrationEngineer** | Manage CI/CD and service integration. |
 | **QATester** | Execute tests and report results. |
 | **DocsWriter** | Update project documentation. |
-
-## Usage
-
-Before running any agents, set your `OPENAI_API_KEY` environment variable:
-```bash
-export OPENAI_API_KEY=your_openai_api_key
-```
-
-If the `codex` command is missing, run the helper script to install it:
-```bash
-./scripts/install_codex.sh
-```
-
-Start Codex with any combination of these agents. Example:
-```bash
-codex agents start LeadPlanner BackendDeveloper FrontendDeveloper QATester DocsWriter
-```
-
-The agents are imported from the `adhd_focus_hub.dev_agents` package.
 
 ## Development Tasks
 
