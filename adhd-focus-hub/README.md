@@ -253,6 +253,20 @@ POST /api/v1/focus/start
 ```
 
 ### Mood Tracking
+Store a mood entry and optionally request emotional support.
+
+```
+POST /api/v1/moods
+{
+  "mood_score": 6,
+  "energy_level": 4,
+  "stress_level": 8,
+  "notes": "Feeling scattered today"
+}
+```
+
+For a mood analysis without saving to your log:
+
 ```
 POST /api/v1/mood/log
 {
