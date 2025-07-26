@@ -10,11 +10,12 @@ from api.models import (
     ChatResponse,
     AgentStatus,
     SystemStatus,
+    ConversationRecord,
 )
 from crew.crew import ADHDFocusHubCrew
 from database import SessionLocal
 from database.models import ConversationHistory
-from services.cache import push_history
+from services.cache import push_history, get_history
 from ..main import get_crew
 
 logger = logging.getLogger(__name__)
@@ -211,4 +212,16 @@ async def get_conversation_summary(
         logger.error(f"Conversation summary error: {str(e)}")
         raise HTTPException(
             status_code=500, detail=f"Conversation summary error: {str(e)}"
+        )
+
+
+@router.get("/api/v1/conversations/history", response_model=list[ConversationRecord])
+async def get_conversation_history(limit: int = 20):
+    """Retrieve recent conversation history from Redis."""
+    try:
+        return await get_history(None, limit)
+    except Exception as e:
+        logger.error(f"Conversation history error: {str(e)}")
+        raise HTTPException(
+            status_code=500, detail=f"Conversation history error: {str(e)}"
         )

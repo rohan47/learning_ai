@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Send, X } from 'lucide-react';
-import { ChatService } from '../services';
+import { ChatService, ConversationRecord } from '../services';
 
 interface Message {
   id: string;
@@ -29,15 +29,14 @@ interface AIChatProps {
 }
 
 const AIChat: React.FC<AIChatProps> = ({ isOpen = true, onClose, mode = 'overlay' }) => {
-  const [messages, setMessages] = useState<Message[]>([
-    {
-      id: '1',
-      text: "Hi! I'm your ADHD Focus Assistant. I can help you with task management, focus sessions, mood tracking, and productivity strategies. What would you like to work on today?",
-      sender: 'ai',
-      timestamp: new Date(),
-      agentType: 'Focus Assistant'
-    }
-  ]);
+  const defaultMessage: Message = {
+    id: '1',
+    text: "Hi! I'm your ADHD Focus Assistant. I can help you with task management, focus sessions, mood tracking, and productivity strategies. What would you like to work on today?",
+    sender: 'ai',
+    timestamp: new Date(),
+    agentType: 'Focus Assistant'
+  };
+  const [messages, setMessages] = useState<Message[]>([]);
   const [inputMessage, setInputMessage] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [comprehensiveMode, setComprehensiveMode] = useState(true);
@@ -46,6 +45,43 @@ const AIChat: React.FC<AIChatProps> = ({ isOpen = true, onClose, mode = 'overlay
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
+
+  // Load conversation history from backend on mount
+  useEffect(() => {
+    const loadHistory = async () => {
+      try {
+        const history: ConversationRecord[] = await ChatService.getConversationHistory();
+        if (history.length > 0) {
+          const loaded: Message[] = [];
+          history
+            .slice()
+            .reverse()
+            .forEach((record) => {
+              loaded.push({
+                id: `${record.created_at}-user`,
+                text: record.message,
+                sender: 'user',
+                timestamp: new Date(record.created_at)
+              });
+              loaded.push({
+                id: `${record.created_at}-ai`,
+                text: record.response,
+                sender: 'ai',
+                timestamp: new Date(record.created_at)
+              });
+            });
+          setMessages(loaded);
+        } else {
+          setMessages([defaultMessage]);
+        }
+      } catch (err) {
+        console.error('Failed to load history', err);
+        setMessages([defaultMessage]);
+      }
+    };
+    loadHistory();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   useEffect(() => {
     scrollToBottom();
@@ -121,13 +157,7 @@ const AIChat: React.FC<AIChatProps> = ({ isOpen = true, onClose, mode = 'overlay
   };
 
   const clearChat = () => {
-    setMessages([{
-      id: '1',
-      text: "Hi! I'm your ADHD Focus Assistant. I can help you with task management, focus sessions, mood tracking, and productivity strategies. What would you like to work on today?",
-      sender: 'ai',
-      timestamp: new Date(),
-      agentType: 'Focus Assistant'
-    }]);
+    setMessages([defaultMessage]);
   };
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
