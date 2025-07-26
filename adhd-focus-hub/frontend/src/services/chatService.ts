@@ -31,6 +31,18 @@ export class ChatService {
   }
 
   /**
+   * Fetch conversation history from Redis
+   */
+  static async getConversationHistory(limit: number = 20): Promise<any> {
+    try {
+      const response = await apiClient.get(`/api/v1/conversations/history?limit=${limit}`);
+      return handleApiResponse(response);
+    } catch (error) {
+      throw new Error(handleApiError(error));
+    }
+  }
+
+  /**
    * Send a fresh chat message (bypasses cache)
    */
   static async sendFreshMessage(request: ChatRequest): Promise<ChatResponse> {

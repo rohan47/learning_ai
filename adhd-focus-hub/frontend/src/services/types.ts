@@ -92,6 +92,15 @@ export interface ChatResponse {
   consultation_quality?: string;
 }
 
+export interface ConversationRecord {
+  id?: number;
+  user_id?: number;
+  message: string;
+  response: string;
+  metadata?: Record<string, any>;
+  created_at: string;
+}
+
 export interface SubTask {
   id: string;
   title: string;

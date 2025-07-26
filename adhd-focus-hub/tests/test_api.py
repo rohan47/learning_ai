@@ -203,3 +203,26 @@ def test_chat_history_persistence(monkeypatch, override_chat_crew):
     assert len(records) == 1
     assert records[0].message == "hello"
     assert saved["record"]["message"] == "hello"
+
+
+def test_get_conversation_history(monkeypatch):
+    async def fake_get_history(user_id, limit=20):
+        return [
+            {
+                "id": 1,
+                "user_id": None,
+                "message": "hi",
+                "response": "ok",
+                "metadata": {},
+                "created_at": "2024-01-01T00:00:00",
+            }
+        ]
+
+    monkeypatch.setattr("backend.api.routes.chat.get_history", fake_get_history)
+
+    with TestClient(app) as client:
+        resp = client.get("/api/v1/conversations/history?limit=5")
+        assert resp.status_code == 200
+        data = resp.json()
+        assert isinstance(data, list)
+        assert data[0]["message"] == "hi"
